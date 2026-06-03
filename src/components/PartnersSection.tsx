@@ -1,18 +1,30 @@
 import { useEffect, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import allergensLogo from "@/assets/partners/allengers.jpg";
 import seesheenLogo from "@/assets/partners/seesheen.png";
 
-const partners = [
-  { name: "Allengers", logo: allergensLogo },
-  { name: "Seesheen", logo: seesheenLogo },
-  { name: "Partner 3", logo: null },
-  { name: "Partner 4", logo: null },
-  { name: "Partner 5", logo: null },
-  { name: "Partner 6", logo: null },
+const fallbackPartners = [
+  { name: "Allengers", logo_url: allergensLogo, website: null as string | null },
+  { name: "Seesheen", logo_url: seesheenLogo, website: null as string | null },
 ];
 
 const PartnersSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const { data: partnersData } = useQuery({
+    queryKey: ["partners"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("partners")
+        .select("*")
+        .order("sort_order");
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const partners = partnersData && partnersData.length > 0 ? partnersData : fallbackPartners;
 
   useEffect(() => {
     const container = scrollRef.current;
@@ -43,7 +55,7 @@ const PartnersSection = () => {
       container.removeEventListener("mouseenter", pause);
       container.removeEventListener("mouseleave", resume);
     };
-  }, []);
+  }, [partners.length]);
 
   // Duplicate items for seamless loop
   const items = [...partners, ...partners];
@@ -69,8 +81,8 @@ const PartnersSection = () => {
               key={index}
               className="flex-shrink-0 w-40 h-24 bg-background border border-border rounded-xl flex items-center justify-center shadow-sm p-3"
             >
-              {partner.logo ? (
-                <img src={partner.logo} alt={partner.name} className="w-full h-full object-cover rounded-xl" />
+              {partner.logo_url ? (
+                <img src={partner.logo_url} alt={partner.name} className="w-full h-full object-contain rounded-xl" />
               ) : (
                 <span className="text-sm text-muted-foreground font-medium">
                   {partner.name}
