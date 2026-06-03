@@ -1,19 +1,15 @@
-import { useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import allergensLogo from "@/assets/partners/allengers.jpg";
-import seesheenLogo from "@/assets/partners/seesheen.png";
-
-const fallbackPartners = [
-  { name: "Allengers", logo_url: allergensLogo, website: null as string | null },
-  { name: "Seesheen", logo_url: seesheenLogo, website: null as string | null },
-];
+import Autoplay from "embla-carousel-autoplay";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 
 const PartnersSection = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const { data: partnersData } = useQuery({
-    queryKey: ["partners"],
+  const { data: partners, isLoading } = useQuery({
+    queryKey: ["public-partners-slider"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("partners")
@@ -24,41 +20,7 @@ const PartnersSection = () => {
     },
   });
 
-  const partners = partnersData && partnersData.length > 0 ? partnersData : fallbackPartners;
-
-  useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-
-    let animationId: number;
-    let scrollPos = 0;
-
-    const scroll = () => {
-      scrollPos += 0.5;
-      if (scrollPos >= container.scrollWidth / 2) {
-        scrollPos = 0;
-      }
-      container.scrollLeft = scrollPos;
-      animationId = requestAnimationFrame(scroll);
-    };
-
-    animationId = requestAnimationFrame(scroll);
-
-    const pause = () => cancelAnimationFrame(animationId);
-    const resume = () => { animationId = requestAnimationFrame(scroll); };
-
-    container.addEventListener("mouseenter", pause);
-    container.addEventListener("mouseleave", resume);
-
-    return () => {
-      cancelAnimationFrame(animationId);
-      container.removeEventListener("mouseenter", pause);
-      container.removeEventListener("mouseleave", resume);
-    };
-  }, [partners.length]);
-
-  // Duplicate items for seamless loop
-  const items = [...partners, ...partners];
+  if (isLoading || !partners?.length) return null;
 
   return (
     <section id="partners" className="py-16 lg:py-24 bg-muted/30">
@@ -72,25 +34,42 @@ const PartnersSection = () => {
           </p>
         </div>
 
-        <div
-          ref={scrollRef}
-          className="flex gap-8 overflow-hidden"
+        <Carousel
+          opts={{ align: "start", loop: true, dragFree: true }}
+          plugins={[
+            Autoplay({ delay: 2000, stopOnInteraction: false, stopOnMouseEnter: true }),
+          ]}
+          className="w-full"
         >
-          {items.map((partner, index) => (
-            <div
-              key={index}
-              className="flex-shrink-0 w-40 h-24 bg-background border border-border rounded-xl flex items-center justify-center shadow-sm p-3"
-            >
-              {partner.logo_url ? (
-                <img src={partner.logo_url} alt={partner.name} className="w-full h-full object-contain rounded-xl" />
-              ) : (
-                <span className="text-sm text-muted-foreground font-medium">
-                  {partner.name}
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
+          <CarouselContent>
+            {partners.map((partner) => (
+              <CarouselItem
+                key={partner.id ?? partner.name}
+                className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5"
+              >
+                <a
+                  href={partner.website || undefined}
+                  target={partner.website ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  className="block w-full h-24 bg-background border border-border rounded-xl flex items-center justify-center shadow-sm p-3"
+                >
+                  {partner.logo_url ? (
+                    <img
+                      src={partner.logo_url}
+                      alt={partner.name}
+                      loading="lazy"
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <span className="text-sm text-muted-foreground font-medium">
+                      {partner.name}
+                    </span>
+                  )}
+                </a>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
       </div>
     </section>
   );
