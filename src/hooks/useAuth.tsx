@@ -28,19 +28,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const checkAdmin = async (userId: string) => {
-    const { data, error } = await supabase.rpc("has_role", {
-      _user_id: userId,
-      _role: "admin",
-    });
-
-    if (error) {
-      console.error("Failed to check admin role", error);
-      return false;
-    }
-
-    return !!data;
-  };
+  const ALLOWED_ADMIN_EMAIL = "samehallengers@gmail.com";
 
   useEffect(() => {
     let isMounted = true;
@@ -57,12 +45,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
 
-      setLoading(true);
-      const adminStatus = await checkAdmin(nextSession.user.id);
-
-      if (!isMounted) return;
-
-      setIsAdmin(adminStatus);
+      const email = nextSession.user.email?.toLowerCase() ?? "";
+      setIsAdmin(email === ALLOWED_ADMIN_EMAIL);
       setLoading(false);
     };
 
