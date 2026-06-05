@@ -11,10 +11,10 @@ const Navbar = () => {
   const links = [
     { label: "Home", href: "/" },
     { label: "Products", href: "/products" },
-    { label: "About", href: "#about" },
-    { label: "Partners", href: "#partners" },
-    { label: "Services", href: "#services" },
-    { label: "Contact", href: "#contact" },
+    { label: "About", href: "/#about" },
+    { label: "Partners", href: "/#partners" },
+    { label: "Services", href: "/#services" },
+    { label: "Contact", href: "/#contact" },
   ];
 
   return (
