@@ -49,10 +49,10 @@ const AdminBanners = () => {
 
   const uploadImage = async (file: File) => {
     const ext = file.name.split(".").pop();
-    const path = `${crypto.randomUUID()}.${ext}`;
-    const { error } = await supabase.storage.from("banners").upload(path, file);
+    const path = `banners/${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage.from("product-images").upload(path, file);
     if (error) throw error;
-    return supabase.storage.from("banners").getPublicUrl(path).data.publicUrl;
+    return supabase.storage.from("product-images").getPublicUrl(path).data.publicUrl;
   };
 
   const saveMutation = useMutation({
