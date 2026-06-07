@@ -16,12 +16,12 @@ const BannersSlider = () => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    supabase
+    (supabase as any)
       .from("banners")
       .select("id,title,description,image_url,link_url")
       .eq("is_active", true)
       .order("sort_order")
-      .then(({ data }) => setBanners(data || []));
+      .then(({ data }: { data: Banner[] | null }) => setBanners(data || []));
   }, []);
 
   useEffect(() => {
