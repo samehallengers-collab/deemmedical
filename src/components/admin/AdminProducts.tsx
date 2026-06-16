@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Pencil, Upload, Save } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import ImageCropInput from "./ImageCropInput";
 
 const AdminProducts = () => {
   const { toast } = useToast();
@@ -21,6 +22,7 @@ const AdminProducts = () => {
   const [form, setForm] = useState({ title: "", description: "", category: "", sort_order: 0, video_url: "", specifications: "" });
   const [selectedRangeIds, setSelectedRangeIds] = useState<string[]>([]);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
 
   const { data: products, isLoading } = useQuery({
     queryKey: ["admin-products"],
@@ -132,6 +134,7 @@ const AdminProducts = () => {
     setForm({ title: "", description: "", category: "", sort_order: 0, video_url: "", specifications: "" });
     setSelectedRangeIds([]);
     setImageFile(null);
+    setCurrentImageUrl(null);
   };
 
   const openEdit = (product: NonNullable<typeof products>[0]) => {
@@ -147,6 +150,7 @@ const AdminProducts = () => {
     // Load range assignments for this product
     const productAssignments = assignments?.filter((a) => a.product_id === product.id) || [];
     setSelectedRangeIds(productAssignments.map((a) => a.product_range_id));
+    setCurrentImageUrl((product as any).image_url || null);
     setDialogOpen(true);
   };
 
@@ -275,12 +279,13 @@ const AdminProducts = () => {
             </div>
             <div className="space-y-1.5">
               <Label>Image</Label>
-              <div className="flex items-center gap-2">
-                <Button type="button" variant="outline" size="sm" className="gap-1.5" onClick={() => document.getElementById("product-img-input")?.click()}>
-                  <Upload className="w-4 h-4" /> {imageFile ? imageFile.name : "Choose file"}
-                </Button>
-                <input id="product-img-input" type="file" accept="image/*" className="hidden" onChange={(e) => setImageFile(e.target.files?.[0] || null)} />
-              </div>
+              <ImageCropInput
+                aspect={1}
+                value={imageFile}
+                onChange={setImageFile}
+                currentUrl={currentImageUrl}
+                hint="Square crop (1:1) — used for product thumbnails."
+              />
             </div>
             <Button type="submit" className="w-full gap-2" disabled={saveMutation.isPending}>
               <Save className="w-4 h-4" />

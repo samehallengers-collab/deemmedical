@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Pencil, Upload } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import ImageCropInput from "./ImageCropInput";
 
 const AdminPartners = () => {
   const { toast } = useToast();
@@ -17,6 +18,7 @@ const AdminPartners = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", website: "", sort_order: 0 });
   const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [currentLogoUrl, setCurrentLogoUrl] = useState<string | null>(null);
 
   const { data: partners, isLoading } = useQuery({
     queryKey: ["admin-partners"],
@@ -79,11 +81,13 @@ const AdminPartners = () => {
     setEditingId(null);
     setForm({ name: "", website: "", sort_order: 0 });
     setLogoFile(null);
+    setCurrentLogoUrl(null);
   };
 
   const openEdit = (partner: NonNullable<typeof partners>[0]) => {
     setEditingId(partner.id);
     setForm({ name: partner.name, website: partner.website || "", sort_order: partner.sort_order || 0 });
+    setCurrentLogoUrl(partner.logo_url || null);
     setDialogOpen(true);
   };
 
@@ -160,12 +164,13 @@ const AdminPartners = () => {
             </div>
             <div className="space-y-1.5">
               <Label>Logo</Label>
-              <div className="flex items-center gap-2">
-                <Button type="button" variant="outline" size="sm" className="gap-1.5" onClick={() => document.getElementById("partner-logo-input")?.click()}>
-                  <Upload className="w-4 h-4" /> {logoFile ? logoFile.name : "Choose file"}
-                </Button>
-                <input id="partner-logo-input" type="file" accept="image/*" className="hidden" onChange={(e) => setLogoFile(e.target.files?.[0] || null)} />
-              </div>
+              <ImageCropInput
+                aspect={1}
+                value={logoFile}
+                onChange={setLogoFile}
+                currentUrl={currentLogoUrl}
+                hint="Square crop (1:1) — keep the logo centered."
+              />
             </div>
             <Button type="submit" className="w-full" disabled={saveMutation.isPending}>
               {saveMutation.isPending ? "Saving..." : "Save Partner"}
