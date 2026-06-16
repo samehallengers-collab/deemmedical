@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Pencil, Save, ImageIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import ImageCropInput from "./ImageCropInput";
 
 const AdminProductRanges = () => {
   const { toast } = useToast();
@@ -18,6 +19,7 @@ const AdminProductRanges = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", description: "", sort_order: 0 });
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
 
   const { data: ranges, isLoading } = useQuery({
     queryKey: ["admin-product-ranges"],
@@ -76,11 +78,13 @@ const AdminProductRanges = () => {
     setEditingId(null);
     setForm({ name: "", description: "", sort_order: 0 });
     setImageFile(null);
+    setCurrentImageUrl(null);
   };
 
   const openEdit = (range: NonNullable<typeof ranges>[0]) => {
     setEditingId(range.id);
     setForm({ name: range.name, description: range.description || "", sort_order: range.sort_order || 0 });
+    setCurrentImageUrl(range.image_url || null);
     setDialogOpen(true);
   };
 
@@ -151,7 +155,13 @@ const AdminProductRanges = () => {
             </div>
             <div className="space-y-1.5">
               <Label>Range Image</Label>
-              <Input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files?.[0] || null)} />
+              <ImageCropInput
+                aspect={4 / 3}
+                value={imageFile}
+                onChange={setImageFile}
+                currentUrl={currentImageUrl}
+                hint="Crop to 4:3 for a clean thumbnail."
+              />
             </div>
             <div className="space-y-1.5">
               <Label>Sort Order</Label>
