@@ -11,6 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Pencil, Upload } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import ImageCropInput from "./ImageCropInput";
 
 interface Banner {
   id: string;
@@ -37,6 +38,7 @@ const AdminBanners = () => {
     is_active: true,
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
 
   const { data: banners, isLoading } = useQuery({
     queryKey: ["admin-banners"],
@@ -93,6 +95,7 @@ const AdminBanners = () => {
     setEditingId(null);
     setForm({ title: "", description: "", link_url: "", sort_order: 0, is_active: true });
     setImageFile(null);
+    setCurrentImageUrl(null);
   };
 
   const openEdit = (b: Banner) => {
@@ -104,6 +107,7 @@ const AdminBanners = () => {
       sort_order: b.sort_order || 0,
       is_active: b.is_active ?? true,
     });
+    setCurrentImageUrl(b.image_url || null);
     setDialogOpen(true);
   };
 
@@ -184,13 +188,13 @@ const AdminBanners = () => {
             </div>
             <div className="space-y-1.5">
               <Label>Image</Label>
-              <div className="flex items-center gap-2">
-                <Button type="button" variant="outline" size="sm" className="gap-1.5" onClick={() => document.getElementById("banner-image-input")?.click()}>
-                  <Upload className="w-4 h-4" /> {imageFile ? imageFile.name : "Choose file"}
-                </Button>
-                <input id="banner-image-input" type="file" accept="image/*" className="hidden" onChange={(e) => setImageFile(e.target.files?.[0] || null)} />
-              </div>
-              <p className="text-xs text-muted-foreground">Recommended: wide image (e.g. 1920×800).</p>
+              <ImageCropInput
+                aspect={21 / 9}
+                value={imageFile}
+                onChange={setImageFile}
+                currentUrl={currentImageUrl}
+                hint="Wide 21:9 crop — fills the homepage banner slider."
+              />
             </div>
             <div className="flex items-center gap-3">
               <Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} />
