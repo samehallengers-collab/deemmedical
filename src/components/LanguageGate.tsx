@@ -16,7 +16,7 @@ const LanguageGate = () => {
       <div className="w-full max-w-md text-center">
         <div className="mb-10">
           <img
-            src={deemLogo}
+            src={deemLogo.url}
             alt="Deem Medical Technology"
             className="h-20 w-auto mx-auto mb-6"
           />

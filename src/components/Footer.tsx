@@ -12,7 +12,7 @@ const Footer = () => {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           <div>
             <div className="mb-4">
-              <img src={deemLogo} alt="Deem Medical Technology" className="h-14 w-auto" />
+              <img src={deemLogo.url} alt="Deem Medical Technology" className="h-14 w-auto" />
             </div>
             <p className="text-sm leading-relaxed">
               {t("footer_tagline")}

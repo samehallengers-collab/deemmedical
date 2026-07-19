@@ -86,7 +86,7 @@ const AdminLogin = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center space-y-4 max-w-md px-4">
-          <img src={deemLogo} alt="Deem" className="h-16 mx-auto" />
+          <img src={deemLogo.url} alt="Deem" className="h-16 mx-auto" />
           <h1 className="font-display text-2xl font-bold text-foreground">Access Denied</h1>
           <p className="text-muted-foreground">Your account does not have admin privileges. Please contact the system administrator.</p>
           <div className="flex gap-2 justify-center">

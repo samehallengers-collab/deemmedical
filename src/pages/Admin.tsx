@@ -35,7 +35,7 @@ const Admin = () => {
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
-            <a href="/"><img src={deemLogo} alt="Deem" className="h-10" /></a>
+            <a href="/"><img src={deemLogo.url} alt="Deem" className="h-10" /></a>
             <span className="font-display font-semibold text-foreground">Admin Dashboard</span>
           </div>
           <div className="flex items-center gap-3">
