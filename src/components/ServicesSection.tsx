@@ -1,40 +1,25 @@
 import { Wrench, Headphones, GraduationCap, RefreshCw } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-
-const services = [
-  {
-    icon: Wrench,
-    title: "Installation & Setup",
-    description: "Professional installation with certified technicians ensuring optimal equipment performance from day one.",
-  },
-  {
-    icon: Headphones,
-    title: "24/7 Support",
-    description: "Round-the-clock technical support with rapid response times to minimize downtime.",
-  },
-  {
-    icon: GraduationCap,
-    title: "Training Programs",
-    description: "Comprehensive staff training to ensure safe and efficient operation of all equipment.",
-  },
-  {
-    icon: RefreshCw,
-    title: "Maintenance Contracts",
-    description: "Preventive maintenance and service agreements to extend equipment lifespan and reliability.",
-  },
-];
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const ServicesSection = () => {
+  const { t } = useLanguage();
+  const services = [
+    { icon: Wrench, title: t("svc_install_title"), description: t("svc_install_desc") },
+    { icon: Headphones, title: t("svc_support_title"), description: t("svc_support_desc") },
+    { icon: GraduationCap, title: t("svc_training_title"), description: t("svc_training_desc") },
+    { icon: RefreshCw, title: t("svc_maintenance_title"), description: t("svc_maintenance_desc") },
+  ];
   return (
     <section id="services" className="py-20 lg:py-28">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-14">
-          <span className="text-sm font-semibold tracking-wider uppercase text-primary">Our Services</span>
+          <span className="text-sm font-semibold tracking-wider uppercase text-primary">{t("services_kicker")}</span>
           <h2 className="font-display text-3xl lg:text-4xl font-bold text-foreground mt-2">
-            End-to-End Equipment Solutions
+            {t("services_title")}
           </h2>
           <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
-            Beyond supply, we provide comprehensive support throughout the equipment lifecycle.
+            {t("services_subtitle")}
           </p>
         </div>
 
