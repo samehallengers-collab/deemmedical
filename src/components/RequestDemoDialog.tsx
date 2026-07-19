@@ -65,6 +65,15 @@ const RequestDemoDialog = ({ open, onOpenChange }: RequestDemoDialogProps) => {
     ? allProducts?.filter((p) => assignments?.some((a) => a.product_id === p.id && a.product_range_id === rangeId))
     : [];
 
+  // Only offer ranges that have at least one active product assigned
+  const activeProductIds = new Set((allProducts ?? []).map((p) => p.id));
+  const rangeIdsWithProducts = new Set(
+    (assignments ?? [])
+      .filter((a) => activeProductIds.has(a.product_id))
+      .map((a) => a.product_range_id),
+  );
+  const availableRanges = (ranges ?? []).filter((r) => rangeIdsWithProducts.has(r.id));
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -127,7 +136,7 @@ const RequestDemoDialog = ({ open, onOpenChange }: RequestDemoDialogProps) => {
             >
               <SelectTrigger><SelectValue placeholder={t("ph_select_range") } /></SelectTrigger>
               <SelectContent>
-                {ranges?.map((r) => (<SelectItem key={r.id} value={r.id}>{r.name}</SelectItem>))}
+                {availableRanges.map((r) => (<SelectItem key={r.id} value={r.id}>{r.name}</SelectItem>))}
               </SelectContent>
             </Select>
           </div>
