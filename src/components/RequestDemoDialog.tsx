@@ -65,6 +65,15 @@ const RequestDemoDialog = ({ open, onOpenChange }: RequestDemoDialogProps) => {
     ? allProducts?.filter((p) => assignments?.some((a) => a.product_id === p.id && a.product_range_id === rangeId))
     : [];
 
+  // Only offer ranges that have at least one active product assigned
+  const activeProductIds = new Set((allProducts ?? []).map((p) => p.id));
+  const rangeIdsWithProducts = new Set(
+    (assignments ?? [])
+      .filter((a) => activeProductIds.has(a.product_id))
+      .map((a) => a.product_range_id),
+  );
+  const availableRanges = (ranges ?? []).filter((r) => rangeIdsWithProducts.has(r.id));
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -100,7 +109,7 @@ const RequestDemoDialog = ({ open, onOpenChange }: RequestDemoDialogProps) => {
             <Label>{t("city")}</Label>
             <Select value={formData.city} onValueChange={(v) => setFormData({ ...formData, city: v })} required>
               <SelectTrigger><SelectValue placeholder={t("ph_select_city")} /></SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-72">
                 {ksaCities.map((city) => (<SelectItem key={city} value={city}>{city}</SelectItem>))}
               </SelectContent>
             </Select>
@@ -126,8 +135,8 @@ const RequestDemoDialog = ({ open, onOpenChange }: RequestDemoDialogProps) => {
               required
             >
               <SelectTrigger><SelectValue placeholder={t("ph_select_range") } /></SelectTrigger>
-              <SelectContent>
-                {ranges?.map((r) => (<SelectItem key={r.id} value={r.id}>{r.name}</SelectItem>))}
+              <SelectContent className="max-h-72">
+                {availableRanges.map((r) => (<SelectItem key={r.id} value={r.id}>{r.name}</SelectItem>))}
               </SelectContent>
             </Select>
           </div>
@@ -140,7 +149,7 @@ const RequestDemoDialog = ({ open, onOpenChange }: RequestDemoDialogProps) => {
               disabled={!rangeId}
             >
               <SelectTrigger><SelectValue placeholder={rangeId ? t("ph_select_product") : t("ph_select_range_first")} /></SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-72">
                 {filteredProducts?.map((p) => (<SelectItem key={p.id} value={p.title}>{p.title}</SelectItem>))}
                 {rangeId && filteredProducts && filteredProducts.length === 0 && (
                   <div className="px-2 py-1.5 text-sm text-muted-foreground">{t("no_products")}</div>
