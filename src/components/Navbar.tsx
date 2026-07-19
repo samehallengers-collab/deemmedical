@@ -69,7 +69,6 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
-              <LanguageToggle className="w-full justify-start" />
               <Button size="sm" className="w-full mt-2" onClick={() => { setIsOpen(false); setEnquiryOpen(true); }}>{t("get_quote")}</Button>
             </div>
           )}
