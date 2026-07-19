@@ -68,13 +68,35 @@ const Navbar = () => {
               <Button size="sm" onClick={() => setEnquiryOpen(true)}>{t("get_quote")}</Button>
             </div>
 
-            <button
-              className="lg:hidden p-2 text-foreground"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
+            <div className="flex lg:hidden items-center gap-2">
+              <div className="flex items-center rounded-md border border-border overflow-hidden">
+                <button
+                  onClick={() => selectLang("en")}
+                  className={`px-2 py-1 text-xs font-semibold transition-colors ${
+                    lang === "en" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                  aria-label="English"
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => selectLang("ar")}
+                  className={`px-2 py-1 text-xs font-semibold transition-colors ${
+                    lang === "ar" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                  aria-label="العربية"
+                >
+                  AR
+                </button>
+              </div>
+              <button
+                className="p-2 text-foreground"
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label="Toggle menu"
+              >
+                {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            </div>
           </div>
 
           {isOpen && (
@@ -90,26 +112,6 @@ const Navbar = () => {
                 </a>
               ))}
               <Button size="sm" className="w-full mt-2" onClick={() => { setIsOpen(false); setEnquiryOpen(true); }}>{t("get_quote")}</Button>
-              <div className="flex items-center rounded-md border border-border overflow-hidden mt-3">
-                <button
-                  onClick={() => { selectLang("en"); setIsOpen(false); }}
-                  className={`flex-1 py-2 text-sm font-semibold transition-colors ${
-                    lang === "en" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
-                  }`}
-                  aria-label="English"
-                >
-                  English
-                </button>
-                <button
-                  onClick={() => { selectLang("ar"); setIsOpen(false); }}
-                  className={`flex-1 py-2 text-sm font-semibold transition-colors ${
-                    lang === "ar" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
-                  }`}
-                  aria-label="العربية"
-                >
-                  العربية
-                </button>
-              </div>
             </div>
           )}
         </div>
