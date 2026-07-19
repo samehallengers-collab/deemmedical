@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Phone } from "lucide-react";
 import deemLogo from "@/assets/deem-logo.jpg";
 import EnquiryDialog from "@/components/EnquiryDialog";
-import LanguageToggle from "@/components/LanguageToggle";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const Navbar = () => {
@@ -46,7 +45,6 @@ const Navbar = () => {
                 <Phone className="w-4 h-4" />
                 +966 XX XXX XXXX
               </a>
-              <LanguageToggle />
               <Button size="sm" onClick={() => setEnquiryOpen(true)}>{t("get_quote")}</Button>
             </div>
 
