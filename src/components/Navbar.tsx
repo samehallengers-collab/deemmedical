@@ -8,7 +8,7 @@ import { useLanguage } from "@/i18n/LanguageContext";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
-  const { t } = useLanguage();
+  const { lang, selectLang, t } = useLanguage();
 
   const links = [
     { label: t("nav_home"), href: "/" },
