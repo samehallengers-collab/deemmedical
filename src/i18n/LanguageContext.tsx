@@ -118,6 +118,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     return (localStorage.getItem(STORAGE_KEY) as Lang) || "en";
   });
 
+  const [hasSelected, setHasSelected] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    return localStorage.getItem(SELECTED_KEY) === "true";
+  });
+
   useEffect(() => {
     const html = document.documentElement;
     html.lang = lang;
@@ -130,10 +135,19 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     setLangState(l);
   };
 
+  const selectLang = (l: Lang) => {
+    localStorage.setItem(STORAGE_KEY, l);
+    localStorage.setItem(SELECTED_KEY, "true");
+    setLangState(l);
+    setHasSelected(true);
+  };
+
   const t = (k: TKey) => translations[lang][k] ?? translations.en[k] ?? k;
 
   return (
-    <LanguageContext.Provider value={{ lang, setLang, t, dir: lang === "ar" ? "rtl" : "ltr" }}>
+    <LanguageContext.Provider
+      value={{ lang, setLang, selectLang, hasSelected, t, dir: lang === "ar" ? "rtl" : "ltr" }}
+    >
       {children}
     </LanguageContext.Provider>
   );
