@@ -103,7 +103,7 @@ const AdminLogin = () => {
       <div className="w-full max-w-sm mx-auto space-y-8 px-4">
         <div className="text-center space-y-2">
           <img
-            src={deemLogo}
+            src={deemLogo.url}
             alt="Deem Medical Technology"
             className="h-20 mx-auto"
           />
