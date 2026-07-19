@@ -14,7 +14,7 @@ const ContactSection = () => {
     { icon: MapPin, label: lang === "ar" ? "الرياض، المملكة العربية السعودية" : "Riyadh, Saudi Arabia" },
     { icon: Phone, label: "+966 XX XXX XXXX" },
     { icon: Mail, label: "info@deem-ksa.com" },
-    { icon: Clock, label: lang === "ar" ? "الاثنين – الجمعة: 8:00 ص – 6:00 م" : "Mon – Fri: 8:00 AM – 6:00 PM" },
+    { icon: Clock, label: lang === "ar" ? "السبت – الخميس: 8:00 ص – 6:00 م" : "Sat – Thu: 8:00 AM – 6:00 PM" },
   ];
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
