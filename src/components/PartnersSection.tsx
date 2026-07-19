@@ -6,8 +6,10 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const PartnersSection = () => {
+  const { t } = useLanguage();
   const { data: partners, isLoading } = useQuery({
     queryKey: ["public-partners-slider"],
     queryFn: async () => {
@@ -27,10 +29,10 @@ const PartnersSection = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-4">
-            Our Partners
+            {t("partners_title")}
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            We collaborate with world-leading medical equipment manufacturers to bring you the best in healthcare technology.
+            {t("partners_subtitle")}
           </p>
         </div>
 
