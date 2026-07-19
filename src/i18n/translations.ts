@@ -127,6 +127,9 @@ export const translations = {
     fc_contact: "Contact",
   },
   ar: {
+    // Language gate
+    gate_welcome: "مرحباً بكم في ديم للتقنيات الطبية",
+    gate_choose: "يرجى اختيار اللغة المفضلة",
     nav_home: "الرئيسية",
     nav_products: "المنتجات",
     nav_about: "من نحن",
