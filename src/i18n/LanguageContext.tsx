@@ -5,6 +5,8 @@ import { translations, type Lang, type TKey } from "./translations";
 interface Ctx {
   lang: Lang;
   setLang: (l: Lang) => void;
+  selectLang: (l: Lang) => void;
+  hasSelected: boolean;
   t: (k: TKey) => string;
   dir: "ltr" | "rtl";
 }
@@ -12,6 +14,7 @@ interface Ctx {
 const LanguageContext = createContext<Ctx | undefined>(undefined);
 
 const STORAGE_KEY = "app_lang";
+const SELECTED_KEY = "app_lang_selected";
 const CACHE_KEY = "app_translation_cache_v1";
 
 // Shared translation cache & batching (module-scope)
