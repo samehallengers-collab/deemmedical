@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,11 +20,6 @@ const ksaCities = [
   "Jubail", "Hail", "Khamis Mushait", "Al Qatif", "Sakaka",
 ];
 
-const demoProducts = [
-  "Patient Monitors", "Ultrasound Systems", "Ventilators", "Defibrillators",
-  "Infusion Pumps", "ECG Machines", "Surgical Lights", "Anesthesia Machines",
-];
-
 interface RequestDemoDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -33,9 +29,41 @@ const RequestDemoDialog = ({ open, onOpenChange }: RequestDemoDialogProps) => {
   const { toast } = useToast();
   const { t } = useLanguage();
   const [submitting, setSubmitting] = useState(false);
+  const [rangeId, setRangeId] = useState<string>("");
   const [formData, setFormData] = useState({
     name: "", hospital: "", city: "", email: "", phone: "", product: "",
   });
+
+  const { data: ranges } = useQuery({
+    queryKey: ["product-ranges"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("product_ranges").select("*").order("sort_order");
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const { data: assignments } = useQuery({
+    queryKey: ["product-range-assignments"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("product_range_assignments").select("*");
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const { data: allProducts } = useQuery({
+    queryKey: ["products-active"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("products").select("*").eq("is_active", true).order("sort_order");
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const filteredProducts = rangeId
+    ? allProducts?.filter((p) => assignments?.some((a) => a.product_id === p.id && a.product_range_id === rangeId))
+    : [];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,6 +75,7 @@ const RequestDemoDialog = ({ open, onOpenChange }: RequestDemoDialogProps) => {
     } else {
       toast({ title: t("demo_submitted"), description: t("demo_soon") });
       setFormData({ name: "", hospital: "", city: "", email: "", phone: "", product: "" });
+      setRangeId("");
       onOpenChange(false);
     }
   };
@@ -87,11 +116,35 @@ const RequestDemoDialog = ({ open, onOpenChange }: RequestDemoDialogProps) => {
             </div>
           </div>
           <div className="space-y-1.5">
-            <Label>{t("product")}</Label>
-            <Select value={formData.product} onValueChange={(v) => setFormData({ ...formData, product: v })} required>
-              <SelectTrigger><SelectValue placeholder={t("ph_select_product")} /></SelectTrigger>
+            <Label>{t("product_range")}</Label>
+            <Select
+              value={rangeId}
+              onValueChange={(v) => {
+                setRangeId(v);
+                setFormData({ ...formData, product: "" });
+              }}
+              required
+            >
+              <SelectTrigger><SelectValue placeholder={t("ph_select_range") } /></SelectTrigger>
               <SelectContent>
-                {demoProducts.map((p) => (<SelectItem key={p} value={p}>{p}</SelectItem>))}
+                {ranges?.map((r) => (<SelectItem key={r.id} value={r.id}>{r.name}</SelectItem>))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <Label>{t("product")}</Label>
+            <Select
+              value={formData.product}
+              onValueChange={(v) => setFormData({ ...formData, product: v })}
+              required
+              disabled={!rangeId}
+            >
+              <SelectTrigger><SelectValue placeholder={rangeId ? t("ph_select_product") : t("ph_select_range_first")} /></SelectTrigger>
+              <SelectContent>
+                {filteredProducts?.map((p) => (<SelectItem key={p.id} value={p.title}>{p.title}</SelectItem>))}
+                {rangeId && filteredProducts && filteredProducts.length === 0 && (
+                  <div className="px-2 py-1.5 text-sm text-muted-foreground">{t("no_products")}</div>
+                )}
               </SelectContent>
             </Select>
           </div>
