@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
-import deemLogo from "@/assets/deem-logo.jpg";
+import deemLogo from "@/assets/deem-logo.png.asset.json";
 
 const AdminLogin = () => {
   const { user, isAdmin, loading, signIn, signUp, signOut } = useAuth();
@@ -86,7 +86,7 @@ const AdminLogin = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center space-y-4 max-w-md px-4">
-          <img src={deemLogo} alt="Deem" className="h-16 mx-auto" />
+          <img src={deemLogo.url} alt="Deem" className="h-16 mx-auto" />
           <h1 className="font-display text-2xl font-bold text-foreground">Access Denied</h1>
           <p className="text-muted-foreground">Your account does not have admin privileges. Please contact the system administrator.</p>
           <div className="flex gap-2 justify-center">
@@ -103,7 +103,7 @@ const AdminLogin = () => {
       <div className="w-full max-w-sm mx-auto space-y-8 px-4">
         <div className="text-center space-y-2">
           <img
-            src={deemLogo}
+            src={deemLogo.url}
             alt="Deem Medical Technology"
             className="h-20 mx-auto"
           />
