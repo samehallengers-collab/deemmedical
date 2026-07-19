@@ -7,8 +7,10 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Play, Package } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useLanguage, Tr, useTr } from "@/i18n/LanguageContext";
 
 const ProductDetail = () => {
+  const { t } = useLanguage();
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -50,6 +52,8 @@ const ProductDetail = () => {
   });
 
   const youtubeEmbedUrl = product?.video_url ? getYouTubeEmbedUrl(product.video_url) : null;
+  const translatedDescription = useTr(product?.description ?? "");
+  const translatedSpecs = useTr(product?.specifications ?? "");
 
   return (
     <div className="min-h-screen bg-background">
@@ -58,14 +62,14 @@ const ProductDetail = () => {
         <div className="container mx-auto px-4 lg:px-8 max-w-5xl">
           <Link to="/products">
             <Button variant="ghost" className="mb-6 gap-2 text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="w-4 h-4" /> Back to Products
+              <ArrowLeft className="w-4 h-4" /> {t("back_to_products")}
             </Button>
           </Link>
 
           {isLoading ? (
-            <div className="text-center text-muted-foreground py-20">Loading...</div>
+            <div className="text-center text-muted-foreground py-20">{t("loading")}</div>
           ) : !product ? (
-            <div className="text-center text-muted-foreground py-20">Product not found.</div>
+            <div className="text-center text-muted-foreground py-20">{t("product_not_found")}</div>
           ) : (
             <div className="grid md:grid-cols-2 gap-10">
               <div className="aspect-square rounded-xl overflow-hidden bg-muted">
@@ -81,22 +85,22 @@ const ProductDetail = () => {
               <div className="flex flex-col gap-6">
                 {rangeNames && rangeNames.length > 0 && (
                   <span className="text-sm font-semibold tracking-wider uppercase text-primary">
-                    {rangeNames.join(" · ")}
+                    <Tr>{rangeNames.join(" · ")}</Tr>
                   </span>
                 )}
-                <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground">{product.title}</h1>
+                <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground"><Tr>{product.title}</Tr></h1>
 
                 {product.description && (
                   <div>
-                    <h2 className="font-display text-lg font-semibold text-foreground mb-2">Description</h2>
-                    <p className="text-muted-foreground whitespace-pre-line">{product.description}</p>
+                    <h2 className="font-display text-lg font-semibold text-foreground mb-2">{t("description")}</h2>
+                    <p className="text-muted-foreground whitespace-pre-line">{translatedDescription}</p>
                   </div>
                 )}
 
                 {product.specifications && (
                   <div>
-                    <h2 className="font-display text-lg font-semibold text-foreground mb-2">Specifications</h2>
-                    <p className="text-muted-foreground whitespace-pre-line">{product.specifications}</p>
+                    <h2 className="font-display text-lg font-semibold text-foreground mb-2">{t("specifications")}</h2>
+                    <p className="text-muted-foreground whitespace-pre-line">{translatedSpecs}</p>
                   </div>
                 )}
 
@@ -104,7 +108,7 @@ const ProductDetail = () => {
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button variant="outline" className="gap-2 w-fit">
-                        <Play className="w-4 h-4" /> Watch Video
+                        <Play className="w-4 h-4" /> {t("watch_video")}
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-3xl p-0 overflow-hidden">

@@ -11,9 +11,11 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Package } from "lucide-react";
+import { useLanguage, Tr } from "@/i18n/LanguageContext";
 
 const AllProductsSlider = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const { data: products, isLoading } = useQuery({
     queryKey: ["public-all-products-slider"],
@@ -35,13 +37,13 @@ const AllProductsSlider = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-12">
           <span className="text-sm font-semibold tracking-wider uppercase text-primary">
-            Our Products
+            {t("products_kicker")}
           </span>
           <h2 className="font-display text-3xl lg:text-4xl font-bold text-foreground mt-2">
-            Equipment You Can Rely On
+            {t("products_title")}
           </h2>
           <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
-            Browse our full range of medical equipment for hospitals, clinics, and laboratories.
+            {t("products_subtitle")}
           </p>
         </div>
 
@@ -79,11 +81,11 @@ const AllProductsSlider = () => {
                     </div>
                     <CardContent className="p-5">
                       <h3 className="font-display font-semibold text-lg text-foreground mb-1">
-                        {product.title}
+                        <Tr>{product.title}</Tr>
                       </h3>
                       {product.description && (
                         <p className="text-sm text-muted-foreground line-clamp-2">
-                          {product.description}
+                          <Tr>{product.description}</Tr>
                         </p>
                       )}
                     </CardContent>

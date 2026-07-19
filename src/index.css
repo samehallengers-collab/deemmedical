@@ -4,6 +4,23 @@
 @tailwind components;
 @tailwind utilities;
 
+.font-arabic,
+.font-arabic h1,
+.font-arabic h2,
+.font-arabic h3,
+.font-arabic h4,
+.font-arabic button,
+.font-arabic input,
+.font-arabic textarea,
+.font-arabic select {
+  font-family: 'Cairo', 'DM Sans', system-ui, sans-serif;
+}
+
+html[dir="rtl"] .lucide-arrow-right,
+html[dir="rtl"] .lucide-chevron-right {
+  transform: scaleX(-1);
+}
+
 @layer base {
   :root {
     --background: 210 20% 98%;

@@ -15,8 +15,10 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "@/components/ui/carousel";
+import { useLanguage, Tr } from "@/i18n/LanguageContext";
 
 const Products = () => {
+  const { t } = useLanguage();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const rangeId = searchParams.get("range");
@@ -69,20 +71,18 @@ const Products = () => {
               {selectedRange ? (
                 <>
                   <Button variant="ghost" className="mb-4 gap-2" onClick={() => navigate("/products")}>
-                    <ArrowLeft className="w-4 h-4" /> All Ranges
+                    <ArrowLeft className="w-4 h-4" /> {t("all_ranges")}
                   </Button>
-                  <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground">{selectedRange.name}</h1>
+                  <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground"><Tr>{selectedRange.name}</Tr></h1>
                   {selectedRange.description && (
-                    <p className="text-muted-foreground mt-3 max-w-xl mx-auto">{selectedRange.description}</p>
+                    <p className="text-muted-foreground mt-3 max-w-xl mx-auto"><Tr>{selectedRange.description}</Tr></p>
                   )}
                 </>
               ) : (
                 <>
-                  <span className="text-sm font-semibold tracking-wider uppercase text-primary">Our Products</span>
-                  <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground mt-2">Equipment You Can Rely On</h1>
-                  <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
-                    We supply a comprehensive range of medical equipment to hospitals, clinics, and laboratories across the country.
-                  </p>
+                  <span className="text-sm font-semibold tracking-wider uppercase text-primary">{t("products_kicker")}</span>
+                  <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground mt-2">{t("products_title")}</h1>
+                  <p className="text-muted-foreground mt-3 max-w-xl mx-auto">{t("products_subtitle")}</p>
                 </>
               )}
             </div>
@@ -91,14 +91,14 @@ const Products = () => {
               <div className="flex flex-wrap justify-center gap-3 mb-12">
                 {ranges.map((range) => (
                   <Button key={range.id} variant="outline" className="rounded-full" onClick={() => navigate(`/products?range=${range.id}`)}>
-                    {range.name}
+                    <Tr>{range.name}</Tr>
                   </Button>
                 ))}
               </div>
             )}
 
             {isLoading ? (
-              <div className="text-center text-muted-foreground py-12">Loading products...</div>
+              <div className="text-center text-muted-foreground py-12">{t("loading_products")}</div>
             ) : products && products.length > 0 ? (
               <div className="px-10">
                 <Carousel
@@ -123,9 +123,9 @@ const Products = () => {
                             )}
                           </div>
                           <CardContent className="p-5">
-                            <h3 className="font-display font-semibold text-lg text-foreground mb-1">{product.title}</h3>
+                            <h3 className="font-display font-semibold text-lg text-foreground mb-1"><Tr>{product.title}</Tr></h3>
                             {product.description && (
-                              <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
+                              <p className="text-sm text-muted-foreground line-clamp-2"><Tr>{product.description}</Tr></p>
                             )}
                           </CardContent>
                         </Card>
@@ -137,7 +137,7 @@ const Products = () => {
                 </Carousel>
               </div>
             ) : (
-              <div className="text-center text-muted-foreground py-12">No products available yet. Check back soon!</div>
+              <div className="text-center text-muted-foreground py-12">{t("no_products")}</div>
             )}
           </div>
         </section>

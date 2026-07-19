@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage, Tr } from "@/i18n/LanguageContext";
 
 interface Banner {
   id: string;
@@ -12,6 +13,7 @@ interface Banner {
 }
 
 const BannersSlider = () => {
+  const { t } = useLanguage();
   const [banners, setBanners] = useState<Banner[]>([]);
   const [index, setIndex] = useState(0);
 
@@ -58,18 +60,18 @@ const BannersSlider = () => {
                   <div className="p-6 md:p-12 lg:p-16 max-w-3xl text-white">
                     {b.title && (
                       <h3 className="font-display text-2xl md:text-4xl lg:text-5xl font-bold mb-3">
-                        {b.title}
+                        <Tr>{b.title}</Tr>
                       </h3>
                     )}
                     {b.description && (
                       <p className="text-sm md:text-base lg:text-lg opacity-90 mb-4">
-                        {b.description}
+                        <Tr>{b.description}</Tr>
                       </p>
                     )}
                     {b.link_url && (
                       <Button asChild size="lg" variant="secondary">
                         <a href={b.link_url} target="_blank" rel="noopener noreferrer">
-                          Learn More
+                          {t("learn_more")}
                         </a>
                       </Button>
                     )}

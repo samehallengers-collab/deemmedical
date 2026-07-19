@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Award, Truck } from "lucide-react";
 import heroImage from "@/assets/hero-medical.jpg";
 import RequestDemoDialog from "@/components/RequestDemoDialog";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const HeroSection = () => {
   const [demoOpen, setDemoOpen] = useState(false);
   const navigate = useNavigate();
+  const { t } = useLanguage();
   return (
     <section className="relative min-h-[90vh] flex items-center pt-20">
       <div className="absolute inset-0 z-0">
@@ -25,31 +27,31 @@ const HeroSection = () => {
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-2 bg-accent/20 border border-accent/40 rounded-full px-4 py-1.5 mb-6">
             <Shield className="w-4 h-4 text-accent" />
-            <span className="text-sm font-medium text-primary-foreground">SFDA Approved Equipment</span>
+            <span className="text-sm font-medium text-primary-foreground">{t("hero_badge")}</span>
           </div>
 
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground leading-[1.1] mb-6">
-            Trusted Medical Equipment for Healthcare Excellence
+            {t("hero_title")}
           </h1>
 
           <p className="text-lg text-primary-foreground/70 mb-8 max-w-lg">
-            Premium diagnostic, surgical, and monitoring equipment from world-leading manufacturers. Your trusted partner for healthcare excellence.
+            {t("hero_subtitle")}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 mb-12">
             <Button size="lg" className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90" onClick={() => navigate("/products")}>
-              Browse Equipment <ArrowRight className="w-4 h-4" />
+              {t("browse_equipment")} <ArrowRight className="w-4 h-4" />
             </Button>
             <Button size="lg" variant="outline" className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground" onClick={() => setDemoOpen(true)}>
-              Request a Demo
+              {t("request_demo")}
             </Button>
           </div>
 
           <div className="flex flex-wrap gap-6">
             {[
-              { icon: Shield, label: "ISO Certified" },
-              { icon: Award, label: "Expert Team" },
-              { icon: Truck, label: "Nationwide Delivery" },
+              { icon: Shield, label: t("iso_certified") },
+              { icon: Award, label: t("expert_team") },
+              { icon: Truck, label: t("nationwide_delivery") },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-2">
                 <item.icon className="w-4 h-4 text-accent" />

@@ -3,18 +3,21 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Phone } from "lucide-react";
 import deemLogo from "@/assets/deem-logo.jpg";
 import EnquiryDialog from "@/components/EnquiryDialog";
+import LanguageToggle from "@/components/LanguageToggle";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
+  const { t } = useLanguage();
 
   const links = [
-    { label: "Home", href: "/" },
-    { label: "Products", href: "/products" },
-    { label: "About", href: "/about" },
-    { label: "Partners", href: "/#partners" },
-    { label: "Services", href: "/#services" },
-    { label: "Contact", href: "/#contact" },
+    { label: t("nav_home"), href: "/" },
+    { label: t("nav_products"), href: "/products" },
+    { label: t("nav_about"), href: "/about" },
+    { label: t("nav_partners"), href: "/#partners" },
+    { label: t("nav_services"), href: "/#services" },
+    { label: t("nav_contact"), href: "/#contact" },
   ];
 
   return (
@@ -43,7 +46,8 @@ const Navbar = () => {
                 <Phone className="w-4 h-4" />
                 +966 XX XXX XXXX
               </a>
-              <Button size="sm" onClick={() => setEnquiryOpen(true)}>Get a Quote</Button>
+              <LanguageToggle />
+              <Button size="sm" onClick={() => setEnquiryOpen(true)}>{t("get_quote")}</Button>
             </div>
 
             <button
@@ -67,7 +71,8 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
-              <Button size="sm" className="w-full mt-2" onClick={() => { setIsOpen(false); setEnquiryOpen(true); }}>Get a Quote</Button>
+              <LanguageToggle className="w-full justify-start" />
+              <Button size="sm" className="w-full mt-2" onClick={() => { setIsOpen(false); setEnquiryOpen(true); }}>{t("get_quote")}</Button>
             </div>
           )}
         </div>

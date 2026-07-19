@@ -1,29 +1,24 @@
 import { CheckCircle } from "lucide-react";
-
-const stats = [
-  { value: "100%", label: "Quality Commitment" },
-  { value: "24/7", label: "Technical Support" },
-];
-
-const features = [
-  "Authorized dealer for leading global brands",
-  "Certified installation and calibration teams",
-  "Comprehensive maintenance and service contracts",
-  "Regulatory compliance and documentation support",
-];
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const AboutSection = () => {
+  const { t } = useLanguage();
+  const stats = [
+    { value: "100%", label: t("stat_quality") },
+    { value: "24/7", label: t("stat_support") },
+  ];
+  const features = [t("about_feat_1"), t("about_feat_2"), t("about_feat_3"), t("about_feat_4")];
   return (
     <section id="about" className="py-20 lg:py-28 bg-muted/50">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-14 items-center">
           <div>
-            <span className="text-sm font-semibold tracking-wider uppercase text-primary">About Us</span>
+            <span className="text-sm font-semibold tracking-wider uppercase text-primary">{t("about_kicker")}</span>
             <h2 className="font-display text-3xl lg:text-4xl font-bold text-foreground mt-2 mb-5">
-              Your Trusted Partner in Medical Equipment
+              {t("about_title")}
             </h2>
             <p className="text-muted-foreground mb-6 leading-relaxed">
-              Deem Medical Technology is your preferred medical equipment supplier for hospitals, clinics, and diagnostic centers. We combine deep industry expertise with an unwavering commitment to quality and compliance.
+              {t("about_body")}
             </p>
             <ul className="space-y-3">
               {features.map((feat) => (

@@ -10,9 +10,11 @@ import {
   CarouselNext,
 } from "@/components/ui/carousel";
 import { Package } from "lucide-react";
+import { useLanguage, Tr } from "@/i18n/LanguageContext";
 
 const ProductRangesSlider = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const { data: ranges, isLoading } = useQuery({
     queryKey: ["public-product-ranges-slider"],
@@ -33,13 +35,13 @@ const ProductRangesSlider = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-12">
           <span className="text-sm font-semibold tracking-wider uppercase text-primary">
-            Our Ranges
+            {t("ranges_kicker")}
           </span>
           <h2 className="font-display text-3xl lg:text-4xl font-bold text-foreground mt-2">
-            Product Ranges
+            {t("ranges_title")}
           </h2>
           <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
-            Explore our comprehensive product categories to find the right equipment for your needs.
+            {t("ranges_subtitle")}
           </p>
         </div>
 
@@ -77,11 +79,11 @@ const ProductRangesSlider = () => {
                     </div>
                     <div className="p-4 text-center">
                       <h3 className="font-display font-semibold text-lg text-foreground">
-                        {range.name}
+                        <Tr>{range.name}</Tr>
                       </h3>
                       {range.description && (
                         <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                          {range.description}
+                          <Tr>{range.description}</Tr>
                         </p>
                       )}
                     </div>
