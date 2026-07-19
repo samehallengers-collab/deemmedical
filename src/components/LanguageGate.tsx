@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import deemLogo from "@/assets/deem-logo.jpg";
+import deemLogo from "@/assets/deem-logo.png.asset.json";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const LanguageGate = () => {

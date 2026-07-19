@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Phone } from "lucide-react";
-import deemLogo from "@/assets/deem-logo.jpg";
+import deemLogo from "@/assets/deem-logo.png.asset.json";
 import EnquiryDialog from "@/components/EnquiryDialog";
 import { useLanguage } from "@/i18n/LanguageContext";
 

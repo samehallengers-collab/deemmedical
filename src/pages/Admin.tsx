@@ -10,7 +10,7 @@ import AdminProductRanges from "@/components/admin/AdminProductRanges";
 import AdminInquiries from "@/components/admin/AdminInquiries";
 import AdminDemoRequests from "@/components/admin/AdminDemoRequests";
 import AdminBanners from "@/components/admin/AdminBanners";
-import deemLogo from "@/assets/deem-logo.jpg";
+import deemLogo from "@/assets/deem-logo.png.asset.json";
 
 const Admin = () => {
   const { user, isAdmin, loading, signOut } = useAuth();

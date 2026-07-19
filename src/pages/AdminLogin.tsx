@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
-import deemLogo from "@/assets/deem-logo.jpg";
+import deemLogo from "@/assets/deem-logo.png.asset.json";
 
 const AdminLogin = () => {
   const { user, isAdmin, loading, signIn, signUp, signOut } = useAuth();
