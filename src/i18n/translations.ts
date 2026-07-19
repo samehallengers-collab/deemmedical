@@ -2,6 +2,9 @@ export type Lang = "en" | "ar";
 
 export const translations = {
   en: {
+    // Language gate
+    gate_welcome: "Welcome to Deem Medical Technology",
+    gate_choose: "Please choose your preferred language",
     // Navbar
     nav_home: "Home",
     nav_products: "Products",
