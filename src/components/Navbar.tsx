@@ -8,7 +8,7 @@ import { useLanguage } from "@/i18n/LanguageContext";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
-  const { t } = useLanguage();
+  const { lang, selectLang, t } = useLanguage();
 
   const links = [
     { label: t("nav_home"), href: "/" },
@@ -41,6 +41,26 @@ const Navbar = () => {
             </div>
 
             <div className="hidden lg:flex items-center gap-3">
+              <div className="flex items-center rounded-md border border-border overflow-hidden">
+                <button
+                  onClick={() => selectLang("en")}
+                  className={`px-2.5 py-1 text-xs font-semibold transition-colors ${
+                    lang === "en" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                  aria-label="English"
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => selectLang("ar")}
+                  className={`px-2.5 py-1 text-xs font-semibold transition-colors ${
+                    lang === "ar" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                  aria-label="العربية"
+                >
+                  AR
+                </button>
+              </div>
               <a href="tel:+966XXXXXXXXX" className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 <Phone className="w-4 h-4" />
                 +966 XX XXX XXXX
@@ -70,6 +90,26 @@ const Navbar = () => {
                 </a>
               ))}
               <Button size="sm" className="w-full mt-2" onClick={() => { setIsOpen(false); setEnquiryOpen(true); }}>{t("get_quote")}</Button>
+              <div className="flex items-center rounded-md border border-border overflow-hidden mt-3">
+                <button
+                  onClick={() => { selectLang("en"); setIsOpen(false); }}
+                  className={`flex-1 py-2 text-sm font-semibold transition-colors ${
+                    lang === "en" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                  aria-label="English"
+                >
+                  English
+                </button>
+                <button
+                  onClick={() => { selectLang("ar"); setIsOpen(false); }}
+                  className={`flex-1 py-2 text-sm font-semibold transition-colors ${
+                    lang === "ar" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                  aria-label="العربية"
+                >
+                  العربية
+                </button>
+              </div>
             </div>
           )}
         </div>
