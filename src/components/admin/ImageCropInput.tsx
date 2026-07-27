@@ -187,6 +187,11 @@ const ImageCropInput = ({
                 crop={crop}
                 zoom={zoom}
                 aspect={aspect}
+                minZoom={0.2}
+                maxZoom={4}
+                zoomSpeed={0.2}
+                restrictPosition={false}
+                objectFit="contain"
                 onCropChange={setCrop}
                 onZoomChange={setZoom}
                 onCropComplete={onCropComplete}
@@ -194,8 +199,22 @@ const ImageCropInput = ({
             )}
           </div>
           <div className="space-y-1.5">
-            <p className="text-xs text-muted-foreground">Zoom</p>
-            <Slider value={[zoom]} min={1} max={4} step={0.05} onValueChange={(v) => setZoom(v[0])} />
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-muted-foreground">Zoom</p>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-7 text-xs"
+                onClick={() => {
+                  setZoom(0.2);
+                  setCrop({ x: 0, y: 0 });
+                }}
+              >
+                Fit whole image
+              </Button>
+            </div>
+            <Slider value={[zoom]} min={0.2} max={4} step={0.02} onValueChange={(v) => setZoom(v[0])} />
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={cancelCrop}>Cancel</Button>
