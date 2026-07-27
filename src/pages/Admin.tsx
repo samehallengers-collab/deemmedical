@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { LogOut, Package, Users, MessageSquare, Calendar, FolderOpen, Image } from "lucide-react";
+import { LogOut, Package, Users, MessageSquare, Calendar, FolderOpen, Image, Building2 } from "lucide-react";
 import AdminProducts from "@/components/admin/AdminProducts";
 import AdminPartners from "@/components/admin/AdminPartners";
 import AdminProductRanges from "@/components/admin/AdminProductRanges";
 import AdminInquiries from "@/components/admin/AdminInquiries";
 import AdminDemoRequests from "@/components/admin/AdminDemoRequests";
 import AdminBanners from "@/components/admin/AdminBanners";
+import AdminCompany from "@/components/admin/AdminCompany";
 import deemLogo from "@/assets/deem-logo.png.asset.json";
 
 const Admin = () => {
@@ -54,6 +55,7 @@ const Admin = () => {
             <TabsTrigger value="banners" className="gap-1.5"><Image className="w-4 h-4" /> Banners</TabsTrigger>
             <TabsTrigger value="inquiries" className="gap-1.5"><MessageSquare className="w-4 h-4" /> Inquiries</TabsTrigger>
             <TabsTrigger value="demos" className="gap-1.5"><Calendar className="w-4 h-4" /> Demo Requests</TabsTrigger>
+            <TabsTrigger value="company" className="gap-1.5"><Building2 className="w-4 h-4" /> Company Details</TabsTrigger>
           </TabsList>
 
           <TabsContent value="products"><AdminProducts /></TabsContent>
@@ -62,6 +64,7 @@ const Admin = () => {
           <TabsContent value="banners"><AdminBanners /></TabsContent>
           <TabsContent value="inquiries"><AdminInquiries /></TabsContent>
           <TabsContent value="demos"><AdminDemoRequests /></TabsContent>
+          <TabsContent value="company"><AdminCompany /></TabsContent>
         </Tabs>
       </main>
     </div>
