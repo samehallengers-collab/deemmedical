@@ -50,6 +50,45 @@ export type Database = {
         }
         Relationships: []
       }
+      company_settings: {
+        Row: {
+          address: string | null
+          address_ar: string | null
+          created_at: string
+          email: string | null
+          id: string
+          logo_url: string | null
+          phone: string | null
+          updated_at: string
+          working_hours: string | null
+          working_hours_ar: string | null
+        }
+        Insert: {
+          address?: string | null
+          address_ar?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          logo_url?: string | null
+          phone?: string | null
+          updated_at?: string
+          working_hours?: string | null
+          working_hours_ar?: string | null
+        }
+        Update: {
+          address?: string | null
+          address_ar?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          logo_url?: string | null
+          phone?: string | null
+          updated_at?: string
+          working_hours?: string | null
+          working_hours_ar?: string | null
+        }
+        Relationships: []
+      }
       demo_requests: {
         Row: {
           city: string
