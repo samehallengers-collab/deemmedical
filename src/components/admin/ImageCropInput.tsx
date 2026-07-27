@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cropper, { Area } from "react-easy-crop";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Upload, Crop as CropIcon, X } from "lucide-react";
 
@@ -78,6 +80,30 @@ const ImageCropInput = ({
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [areaPixels, setAreaPixels] = useState<Area | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 400 });
+  const [customFrame, setCustomFrame] = useState(false);
+  const [framePct, setFramePct] = useState({ w: 80, h: 80 });
+
+  useLayoutEffect(() => {
+    if (!open) return;
+    const el = containerRef.current;
+    if (!el) return;
+    const measure = () =>
+      setContainerSize({ width: el.clientWidth, height: el.clientHeight });
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [open]);
+
+  const cropSize =
+    customFrame && containerSize.width
+      ? {
+          width: Math.round((containerSize.width * framePct.w) / 100),
+          height: Math.round((containerSize.height * framePct.h) / 100),
+        }
+      : undefined;
 
   useEffect(() => {
     if (!value) {
