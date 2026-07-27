@@ -208,13 +208,14 @@ const ImageCropInput = ({
           <DialogHeader>
             <DialogTitle>Crop image</DialogTitle>
           </DialogHeader>
-          <div className="relative w-full h-[400px] bg-muted rounded-md overflow-hidden">
+          <div ref={containerRef} className="relative w-full h-[400px] bg-muted rounded-md overflow-hidden">
             {sourceUrl && (
               <Cropper
                 image={sourceUrl}
                 crop={crop}
                 zoom={zoom}
                 aspect={aspect}
+                cropSize={cropSize}
                 minZoom={0.2}
                 maxZoom={4}
                 zoomSpeed={0.2}
@@ -243,6 +244,47 @@ const ImageCropInput = ({
               </Button>
             </div>
             <Slider value={[zoom]} min={0.2} max={4} step={0.02} onValueChange={(v) => setZoom(v[0])} />
+          </div>
+          <div className="space-y-2 border-t pt-3">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="custom-frame" className="text-xs text-muted-foreground">
+                Custom crop frame size
+              </Label>
+              <Switch id="custom-frame" checked={customFrame} onCheckedChange={setCustomFrame} />
+            </div>
+            {customFrame && (
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="space-y-1.5">
+                  <p className="text-xs text-muted-foreground">
+                    Width {cropSize?.width ?? 0}px
+                  </p>
+                  <Slider
+                    value={[framePct.w]}
+                    min={10}
+                    max={100}
+                    step={1}
+                    onValueChange={(v) => setFramePct((p) => ({ ...p, w: v[0] }))}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <p className="text-xs text-muted-foreground">
+                    Height {cropSize?.height ?? 0}px
+                  </p>
+                  <Slider
+                    value={[framePct.h]}
+                    min={10}
+                    max={100}
+                    step={1}
+                    onValueChange={(v) => setFramePct((p) => ({ ...p, h: v[0] }))}
+                  />
+                </div>
+              </div>
+            )}
+            {customFrame && (
+              <p className="text-xs text-muted-foreground">
+                Free crop frame — the saved image will use these proportions instead of the default ratio.
+              </p>
+            )}
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={cancelCrop}>Cancel</Button>
