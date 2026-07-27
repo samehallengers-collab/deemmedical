@@ -6,16 +6,24 @@ import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useCompanySettings } from "@/hooks/useCompanySettings";
 
 const ContactSection = () => {
   const { toast } = useToast();
   const { t, lang } = useLanguage();
+  const { data: company } = useCompanySettings();
+  const address =
+    (lang === "ar" ? company?.address_ar || company?.address : company?.address) ||
+    (lang === "ar" ? "الرياض، المملكة العربية السعودية" : "Riyadh, Saudi Arabia");
+  const hours =
+    (lang === "ar" ? company?.working_hours_ar || company?.working_hours : company?.working_hours) ||
+    (lang === "ar" ? "السبت – الخميس: 8:00 ص – 6:00 م" : "Sat – Thu: 8:00 AM – 6:00 PM");
   const contactInfo = [
-    { icon: MapPin, label: lang === "ar" ? "الرياض، المملكة العربية السعودية" : "Riyadh, Saudi Arabia" },
-    { icon: Phone, label: "+966 XX XXX XXXX" },
-    { icon: Mail, label: "info@deem-ksa.com" },
-    { icon: Clock, label: lang === "ar" ? "السبت – الخميس: 8:00 ص – 6:00 م" : "Sat – Thu: 8:00 AM – 6:00 PM" },
-  ];
+    { icon: MapPin, label: address },
+    { icon: Phone, label: company?.phone || "+966 XX XXX XXXX" },
+    { icon: Mail, label: company?.email || "info@deem-ksa.com" },
+    { icon: Clock, label: hours },
+  ].filter((i) => i.label);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     name: "", organization: "", email: "", phone: "", interest: "", message: "",
@@ -46,6 +54,13 @@ const ContactSection = () => {
             <p className="text-muted-foreground mb-8 leading-relaxed">
               {t("contact_body")}
             </p>
+            {company?.logo_url && (
+              <img
+                src={company.logo_url}
+                alt="Company logo"
+                className="h-16 w-auto object-contain mb-6"
+              />
+            )}
             <div className="space-y-4">
               {contactInfo.map((item) => (
                 <div key={item.label} className="flex items-start gap-3">
