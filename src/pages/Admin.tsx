@@ -11,7 +11,7 @@ import AdminInquiries from "@/components/admin/AdminInquiries";
 import AdminDemoRequests from "@/components/admin/AdminDemoRequests";
 import AdminBanners from "@/components/admin/AdminBanners";
 import AdminCompany from "@/components/admin/AdminCompany";
-import deemLogo from "@/assets/deem-logo.png.asset.json";
+import deemLogo from "@/assets/deem-logo.png";
 
 const Admin = () => {
   const { user, isAdmin, loading, signOut } = useAuth();
@@ -36,7 +36,7 @@ const Admin = () => {
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
-            <a href="/"><img src={deemLogo.url} alt="Deem" className="h-10" /></a>
+            <a href="/"><img src={deemLogo} alt="Deem" className="h-10 w-auto object-contain" /></a>
             <span className="font-display font-semibold text-foreground">Admin Dashboard</span>
           </div>
           <div className="flex items-center gap-3">

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Phone } from "lucide-react";
-import deemLogo from "@/assets/deem-logo.png.asset.json";
+import deemLogo from "@/assets/deem-logo.png";
 import EnquiryDialog from "@/components/EnquiryDialog";
 import { useLanguage } from "@/i18n/LanguageContext";
 
@@ -21,11 +21,15 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white backdrop-blur-xl border-b border-border">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-b border-border shadow-sm">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
-            <a href="/" className="flex items-center">
-              <img src={deemLogo.url} alt="Deem Medical Technology" className="h-14 w-auto" />
+            <a href="/" className="flex items-center gap-2 group shrink-0">
+              <img 
+                src={deemLogo} 
+                alt="Deem Medical Technology" 
+                className="h-10 sm:h-12 lg:h-14 w-auto object-contain transition-transform duration-200 group-hover:scale-105" 
+              />
             </a>
 
             <div className="hidden lg:flex items-center gap-8">

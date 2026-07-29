@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import deemLogo from "@/assets/deem-logo.png.asset.json";
+import deemLogo from "@/assets/deem-logo.png";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const LanguageGate = () => {
@@ -16,9 +16,9 @@ const LanguageGate = () => {
       <div className="w-full max-w-md text-center">
         <div className="mb-10">
           <img
-            src={deemLogo.url}
+            src={deemLogo}
             alt="Deem Medical Technology"
-            className="h-20 w-auto mx-auto mb-6"
+            className="h-20 w-auto mx-auto mb-6 object-contain"
           />
           <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-2">
             {t("gate_welcome")}

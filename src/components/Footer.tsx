@@ -1,4 +1,4 @@
-import deemLogo from "@/assets/deem-logo.png.asset.json";
+import deemLogo from "@/assets/deem-logo.png";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const Footer = () => {
@@ -12,7 +12,9 @@ const Footer = () => {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           <div>
             <div className="mb-4">
-              <img src={deemLogo.url} alt="Deem Medical Technology" className="h-14 w-auto" />
+              <a href="/" className="inline-block hover:opacity-90 transition-opacity">
+                <img src={deemLogo} alt="Deem Medical Technology" className="h-12 sm:h-14 w-auto object-contain" />
+              </a>
             </div>
             <p className="text-sm leading-relaxed">
               {t("footer_tagline")}
