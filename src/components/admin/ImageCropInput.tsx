@@ -232,6 +232,35 @@ const ImageCropInput = ({
               </ReactCrop>
             )}
           </div>
+          <div className="flex items-center justify-center gap-3 border-t pt-3">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={() => setZoom((z) => Math.max(0.2, Math.round((z - 0.2) * 100) / 100))}
+              aria-label="Zoom out"
+            >
+              <ZoomOut className="w-4 h-4" />
+            </Button>
+            <span className="text-sm font-medium w-14 text-center">{Math.round(zoom * 100)}%</span>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={() => setZoom((z) => Math.min(3, Math.round((z + 0.2) * 100) / 100))}
+              aria-label="Zoom in"
+            >
+              <ZoomIn className="w-4 h-4" />
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setZoom(1)}
+            >
+              Reset
+            </Button>
+          </div>
           <div className="flex items-center justify-between border-t pt-3">
             <div>
               <Label htmlFor="lock-ratio" className="text-xs">Lock to recommended ratio</Label>
