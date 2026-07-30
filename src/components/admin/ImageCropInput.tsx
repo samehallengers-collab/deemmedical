@@ -120,6 +120,8 @@ const ImageCropInput = ({
     setOriginalName(f.name);
     setCrop(undefined);
     setCompletedCrop(null);
+    setDisplaySize(null);
+    setZoom(1);
     setSourceUrl(URL.createObjectURL(f));
     setOpen(true);
   };
