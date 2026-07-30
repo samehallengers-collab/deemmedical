@@ -67,6 +67,8 @@ const ImageCropInput = ({
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop | null>(null);
   const [lockRatio, setLockRatio] = useState(true);
+  const [zoom, setZoom] = useState(1);
+  const [displaySize, setDisplaySize] = useState<{ width: number; height: number } | null>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const inputIdRef = useRef(`imgcrop-${Math.random().toString(36).slice(2, 8)}`);
 
