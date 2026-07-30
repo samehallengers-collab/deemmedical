@@ -222,7 +222,12 @@ const ImageCropInput = ({
                   src={sourceUrl}
                   alt="Crop source"
                   onLoad={onImageLoad}
-                  style={{ maxHeight: "55vh", maxWidth: "100%" }}
+                  style={{
+                    width: displaySize ? `${Math.round(displaySize.width * zoom)}px` : undefined,
+                    height: displaySize ? `${Math.round(displaySize.height * zoom)}px` : undefined,
+                    maxWidth: "none",
+                    maxHeight: "none",
+                  }}
                 />
               </ReactCrop>
             )}
