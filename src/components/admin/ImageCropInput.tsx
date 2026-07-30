@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Upload, Crop as CropIcon, X } from "lucide-react";
+import { Upload, Crop as CropIcon, X, ZoomIn, ZoomOut } from "lucide-react";
 
 interface ImageCropInputProps {
   aspect: number;
