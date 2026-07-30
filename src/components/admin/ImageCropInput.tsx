@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Upload, Crop as CropIcon, X } from "lucide-react";
+import { Upload, Crop as CropIcon, X, ZoomIn, ZoomOut } from "lucide-react";
 
 interface ImageCropInputProps {
   aspect: number;
@@ -67,6 +67,8 @@ const ImageCropInput = ({
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop | null>(null);
   const [lockRatio, setLockRatio] = useState(true);
+  const [zoom, setZoom] = useState(1);
+  const [displaySize, setDisplaySize] = useState<{ width: number; height: number } | null>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const inputIdRef = useRef(`imgcrop-${Math.random().toString(36).slice(2, 8)}`);
 
@@ -92,14 +94,23 @@ const ImageCropInput = ({
   };
 
   const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    const { width, height } = e.currentTarget;
-    setCrop(buildInitialCrop(width, height, lockRatio));
+    const img = e.currentTarget;
+    const { naturalWidth, naturalHeight } = img;
+    const maxW = 600;
+    const maxH = 560;
+    const scale = Math.min(1, maxW / naturalWidth, maxH / naturalHeight);
+    const baseW = Math.round(naturalWidth * scale);
+    const baseH = Math.round(naturalHeight * scale);
+    setDisplaySize({ width: baseW, height: baseH });
+    setCrop(buildInitialCrop(baseW, baseH, lockRatio));
   };
 
   const toggleRatio = (locked: boolean) => {
     setLockRatio(locked);
     const img = imgRef.current;
-    if (img) setCrop(buildInitialCrop(img.width, img.height, locked));
+    if (img && displaySize) {
+      setCrop(buildInitialCrop(displaySize.width * zoom, displaySize.height * zoom, locked));
+    }
   };
 
   const onFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,6 +120,8 @@ const ImageCropInput = ({
     setOriginalName(f.name);
     setCrop(undefined);
     setCompletedCrop(null);
+    setDisplaySize(null);
+    setZoom(1);
     setSourceUrl(URL.createObjectURL(f));
     setOpen(true);
   };
@@ -119,12 +132,16 @@ const ImageCropInput = ({
     onChange(file);
     if (sourceUrl) URL.revokeObjectURL(sourceUrl);
     setSourceUrl(null);
+    setDisplaySize(null);
+    setZoom(1);
     setOpen(false);
   };
 
   const cancelCrop = () => {
     if (sourceUrl) URL.revokeObjectURL(sourceUrl);
     setSourceUrl(null);
+    setDisplaySize(null);
+    setZoom(1);
     setOpen(false);
   };
 
@@ -205,10 +222,44 @@ const ImageCropInput = ({
                   src={sourceUrl}
                   alt="Crop source"
                   onLoad={onImageLoad}
-                  style={{ maxHeight: "55vh", maxWidth: "100%" }}
+                  style={{
+                    width: displaySize ? `${Math.round(displaySize.width * zoom)}px` : undefined,
+                    height: displaySize ? `${Math.round(displaySize.height * zoom)}px` : undefined,
+                    maxWidth: "none",
+                    maxHeight: "none",
+                  }}
                 />
               </ReactCrop>
             )}
+          </div>
+          <div className="flex items-center justify-center gap-3 border-t pt-3">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={() => setZoom((z) => Math.max(0.2, Math.round((z - 0.2) * 100) / 100))}
+              aria-label="Zoom out"
+            >
+              <ZoomOut className="w-4 h-4" />
+            </Button>
+            <span className="text-sm font-medium w-14 text-center">{Math.round(zoom * 100)}%</span>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={() => setZoom((z) => Math.min(3, Math.round((z + 0.2) * 100) / 100))}
+              aria-label="Zoom in"
+            >
+              <ZoomIn className="w-4 h-4" />
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setZoom(1)}
+            >
+              Reset
+            </Button>
           </div>
           <div className="flex items-center justify-between border-t pt-3">
             <div>
