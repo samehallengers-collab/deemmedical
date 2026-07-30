@@ -132,12 +132,16 @@ const ImageCropInput = ({
     onChange(file);
     if (sourceUrl) URL.revokeObjectURL(sourceUrl);
     setSourceUrl(null);
+    setDisplaySize(null);
+    setZoom(1);
     setOpen(false);
   };
 
   const cancelCrop = () => {
     if (sourceUrl) URL.revokeObjectURL(sourceUrl);
     setSourceUrl(null);
+    setDisplaySize(null);
+    setZoom(1);
     setOpen(false);
   };
 
