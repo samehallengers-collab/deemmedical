@@ -94,14 +94,23 @@ const ImageCropInput = ({
   };
 
   const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    const { width, height } = e.currentTarget;
-    setCrop(buildInitialCrop(width, height, lockRatio));
+    const img = e.currentTarget;
+    const { naturalWidth, naturalHeight } = img;
+    const maxW = 600;
+    const maxH = 560;
+    const scale = Math.min(1, maxW / naturalWidth, maxH / naturalHeight);
+    const baseW = Math.round(naturalWidth * scale);
+    const baseH = Math.round(naturalHeight * scale);
+    setDisplaySize({ width: baseW, height: baseH });
+    setCrop(buildInitialCrop(baseW, baseH, lockRatio));
   };
 
   const toggleRatio = (locked: boolean) => {
     setLockRatio(locked);
     const img = imgRef.current;
-    if (img) setCrop(buildInitialCrop(img.width, img.height, locked));
+    if (img && displaySize) {
+      setCrop(buildInitialCrop(displaySize.width * zoom, displaySize.height * zoom, locked));
+    }
   };
 
   const onFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
