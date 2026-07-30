@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import Cropper, { Area } from "react-easy-crop";
+import { useEffect, useRef, useState } from "react";
+import ReactCrop, { Crop, PixelCrop, centerCrop, makeAspectCrop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -16,42 +16,29 @@ interface ImageCropInputProps {
   hint?: string;
 }
 
-const createImage = (url: string): Promise<HTMLImageElement> =>
-  new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = url;
-  });
-
 const getCroppedFile = async (
-  src: string,
-  area: Area,
+  image: HTMLImageElement,
+  area: PixelCrop,
   fileName: string,
 ): Promise<File> => {
-  const image = await createImage(src);
+  const scaleX = image.naturalWidth / image.width;
+  const scaleY = image.naturalHeight / image.height;
+  const sx = area.x * scaleX;
+  const sy = area.y * scaleY;
+  const sw = area.width * scaleX;
+  const sh = area.height * scaleY;
+
   const canvas = document.createElement("canvas");
-  // Cap max width to keep files reasonable
   const maxW = 2000;
-  const scale = area.width > maxW ? maxW / area.width : 1;
-  canvas.width = Math.round(area.width * scale);
-  canvas.height = Math.round(area.height * scale);
+  const scale = sw > maxW ? maxW / sw : 1;
+  canvas.width = Math.max(1, Math.round(sw * scale));
+  canvas.height = Math.max(1, Math.round(sh * scale));
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Canvas not supported");
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(
-    image,
-    area.x,
-    area.y,
-    area.width,
-    area.height,
-    0,
-    0,
-    canvas.width,
-    canvas.height,
-  );
+  ctx.drawImage(image, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+
   return new Promise((resolve, reject) =>
     canvas.toBlob(
       (blob) => {
@@ -77,33 +64,11 @@ const ImageCropInput = ({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [originalName, setOriginalName] = useState<string>("image.jpg");
   const [open, setOpen] = useState(false);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [areaPixels, setAreaPixels] = useState<Area | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [containerSize, setContainerSize] = useState({ width: 0, height: 400 });
-  const [customFrame, setCustomFrame] = useState(false);
-  const [framePct, setFramePct] = useState({ w: 80, h: 80 });
-
-  useLayoutEffect(() => {
-    if (!open) return;
-    const el = containerRef.current;
-    if (!el) return;
-    const measure = () =>
-      setContainerSize({ width: el.clientWidth, height: el.clientHeight });
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [open]);
-
-  const cropSize =
-    customFrame && containerSize.width
-      ? {
-          width: Math.round((containerSize.width * framePct.w) / 100),
-          height: Math.round((containerSize.height * framePct.h) / 100),
-        }
-      : undefined;
+  const [crop, setCrop] = useState<Crop>();
+  const [completedCrop, setCompletedCrop] = useState<PixelCrop | null>(null);
+  const [lockRatio, setLockRatio] = useState(true);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const inputIdRef = useRef(`imgcrop-${Math.random().toString(36).slice(2, 8)}`);
 
   useEffect(() => {
     if (!value) {
@@ -115,27 +80,44 @@ const ImageCropInput = ({
     return () => URL.revokeObjectURL(url);
   }, [value]);
 
+  const buildInitialCrop = (w: number, h: number, useAspect: boolean) => {
+    if (useAspect) {
+      return centerCrop(
+        makeAspectCrop({ unit: "%", width: 90 }, aspect, w, h),
+        w,
+        h,
+      );
+    }
+    return centerCrop({ unit: "%" as const, width: 90, height: 90 }, w, h);
+  };
+
+  const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const { width, height } = e.currentTarget;
+    setCrop(buildInitialCrop(width, height, lockRatio));
+  };
+
+  const toggleRatio = (locked: boolean) => {
+    setLockRatio(locked);
+    const img = imgRef.current;
+    if (img) setCrop(buildInitialCrop(img.width, img.height, locked));
+  };
+
   const onFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     e.target.value = "";
     if (!f) return;
     setOriginalName(f.name);
-    const url = URL.createObjectURL(f);
-    setSourceUrl(url);
-    setCrop({ x: 0, y: 0 });
-    setZoom(1);
+    setCrop(undefined);
+    setCompletedCrop(null);
+    setSourceUrl(URL.createObjectURL(f));
     setOpen(true);
   };
 
-  const onCropComplete = useCallback((_: Area, pixels: Area) => {
-    setAreaPixels(pixels);
-  }, []);
-
   const confirmCrop = async () => {
-    if (!sourceUrl || !areaPixels) return;
-    const file = await getCroppedFile(sourceUrl, areaPixels, originalName);
+    if (!imgRef.current || !completedCrop || !completedCrop.width || !completedCrop.height) return;
+    const file = await getCroppedFile(imgRef.current, completedCrop, originalName);
     onChange(file);
-    URL.revokeObjectURL(sourceUrl);
+    if (sourceUrl) URL.revokeObjectURL(sourceUrl);
     setSourceUrl(null);
     setOpen(false);
   };
@@ -147,7 +129,7 @@ const ImageCropInput = ({
   };
 
   const displayUrl = previewUrl || currentUrl || null;
-  const inputId = `imgcrop-${label.replace(/\s+/g, "-")}-${Math.random().toString(36).slice(2, 7)}`;
+  const inputId = inputIdRef.current;
 
   return (
     <div className="space-y-2">
@@ -208,87 +190,41 @@ const ImageCropInput = ({
           <DialogHeader>
             <DialogTitle>Crop image</DialogTitle>
           </DialogHeader>
-          <div ref={containerRef} className="relative w-full h-[400px] bg-muted rounded-md overflow-hidden">
+          <div className="flex items-center justify-center bg-muted rounded-md overflow-auto max-h-[60vh] p-2">
             {sourceUrl && (
-              <Cropper
-                image={sourceUrl}
+              <ReactCrop
                 crop={crop}
-                zoom={zoom}
-                aspect={aspect}
-                cropSize={cropSize}
-                minZoom={0.2}
-                maxZoom={4}
-                zoomSpeed={0.2}
-                restrictPosition={false}
-                objectFit="contain"
-                onCropChange={setCrop}
-                onZoomChange={setZoom}
-                onCropComplete={onCropComplete}
-              />
-            )}
-          </div>
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <p className="text-xs text-muted-foreground">Zoom</p>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="h-7 text-xs"
-                onClick={() => {
-                  setZoom(0.2);
-                  setCrop({ x: 0, y: 0 });
-                }}
+                onChange={(_, percentCrop) => setCrop(percentCrop)}
+                onComplete={(c) => setCompletedCrop(c)}
+                aspect={lockRatio ? aspect : undefined}
+                keepSelection
+                ruleOfThirds
               >
-                Fit whole image
-              </Button>
-            </div>
-            <Slider value={[zoom]} min={0.2} max={4} step={0.02} onValueChange={(v) => setZoom(v[0])} />
+                <img
+                  ref={imgRef}
+                  src={sourceUrl}
+                  alt="Crop source"
+                  onLoad={onImageLoad}
+                  style={{ maxHeight: "55vh", maxWidth: "100%" }}
+                />
+              </ReactCrop>
+            )}
           </div>
-          <div className="space-y-2 border-t pt-3">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="custom-frame" className="text-xs text-muted-foreground">
-                Custom crop frame size
-              </Label>
-              <Switch id="custom-frame" checked={customFrame} onCheckedChange={setCustomFrame} />
-            </div>
-            {customFrame && (
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="space-y-1.5">
-                  <p className="text-xs text-muted-foreground">
-                    Width {cropSize?.width ?? 0}px
-                  </p>
-                  <Slider
-                    value={[framePct.w]}
-                    min={10}
-                    max={100}
-                    step={1}
-                    onValueChange={(v) => setFramePct((p) => ({ ...p, w: v[0] }))}
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <p className="text-xs text-muted-foreground">
-                    Height {cropSize?.height ?? 0}px
-                  </p>
-                  <Slider
-                    value={[framePct.h]}
-                    min={10}
-                    max={100}
-                    step={1}
-                    onValueChange={(v) => setFramePct((p) => ({ ...p, h: v[0] }))}
-                  />
-                </div>
-              </div>
-            )}
-            {customFrame && (
+          <div className="flex items-center justify-between border-t pt-3">
+            <div>
+              <Label htmlFor="lock-ratio" className="text-xs">Lock to recommended ratio</Label>
               <p className="text-xs text-muted-foreground">
-                Free crop frame — the saved image will use these proportions instead of the default ratio.
+                Turn off to drag any side or corner freely.
+                {completedCrop
+                  ? ` Selection: ${Math.round(completedCrop.width)}×${Math.round(completedCrop.height)}px`
+                  : ""}
               </p>
-            )}
+            </div>
+            <Switch id="lock-ratio" checked={lockRatio} onCheckedChange={toggleRatio} />
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={cancelCrop}>Cancel</Button>
-            <Button type="button" onClick={confirmCrop}>Apply crop</Button>
+            <Button type="button" onClick={confirmCrop} disabled={!completedCrop?.width}>Apply crop</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
