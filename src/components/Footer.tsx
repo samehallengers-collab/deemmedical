@@ -15,7 +15,12 @@ const Footer = () => {
     },
   });
   const services = [t("fs_install"), t("fs_training"), t("fs_maintenance"), t("fs_support")];
-  const company = [t("fc_about"), t("fc_cert"), t("fc_careers"), t("fc_contact")];
+  const company = [
+    { label: t("fc_about"), href: "/about" },
+    { label: t("fc_cert"), href: "#about" },
+    { label: t("fc_careers"), href: "#about" },
+    { label: t("fc_contact"), href: "#about" },
+  ];
   return (
     <footer className="bg-white text-muted-foreground py-12 border-t border-border">
       <div className="container mx-auto px-4 lg:px-8">
@@ -57,7 +62,13 @@ const Footer = () => {
             <h4 className="font-display font-semibold text-foreground mb-3">{t("footer_company")}</h4>
             <ul className="space-y-2 text-sm">
               {company.map((item) => (
-                <li key={item}><a href="#about" className="hover:text-foreground transition-colors">{item}</a></li>
+                <li key={item.href + item.label}>
+                  {item.href.startsWith("/") ? (
+                    <Link to={item.href} className="hover:text-foreground transition-colors">{item.label}</Link>
+                  ) : (
+                    <a href={item.href} className="hover:text-foreground transition-colors">{item.label}</a>
+                  )}
+                </li>
               ))}
             </ul>
           </div>
