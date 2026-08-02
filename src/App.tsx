@@ -24,6 +24,7 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <LanguageProvider>
+            <ScrollToTop />
             <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/index" element={<Index />} />
