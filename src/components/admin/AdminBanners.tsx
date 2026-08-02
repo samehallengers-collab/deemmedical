@@ -55,7 +55,7 @@ const AdminBanners = () => {
     const path = `banners/${crypto.randomUUID()}.${ext}`;
     const { error } = await supabase.storage
       .from("product-images")
-      .upload(path, file, { upsert: true, contentType: file.type || "image/jpeg" });
+      .upload(path, file, { contentType: file.type || "image/jpeg" });
     if (error) throw new Error(`Image upload failed: ${error.message}`);
     return supabase.storage.from("product-images").getPublicUrl(path).data.publicUrl;
   };
