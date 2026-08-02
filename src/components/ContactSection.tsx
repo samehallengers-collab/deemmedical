@@ -54,13 +54,6 @@ const ContactSection = () => {
             <p className="text-muted-foreground mb-8 leading-relaxed">
               {t("contact_body")}
             </p>
-            {company?.logo_url && (
-              <img
-                src={company.logo_url}
-                alt="Company logo"
-                className="h-16 w-auto object-contain mb-6"
-              />
-            )}
             <div className="space-y-4">
               {contactInfo.map((item) => (
                 <div key={item.label} className="flex items-start gap-3">
