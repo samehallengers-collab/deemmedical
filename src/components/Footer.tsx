@@ -34,8 +34,12 @@ const Footer = () => {
           <div>
             <h4 className="font-display font-semibold text-foreground mb-3">{t("footer_products")}</h4>
             <ul className="space-y-2 text-sm">
-              {products.map((item) => (
-                <li key={item}><a href="#products" className="hover:text-foreground transition-colors">{item}</a></li>
+              {ranges?.map((range) => (
+                <li key={range.id}>
+                  <Link to={`/products?range=${range.id}`} className="hover:text-foreground transition-colors">
+                    <Tr>{range.name}</Tr>
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
