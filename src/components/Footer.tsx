@@ -62,7 +62,13 @@ const Footer = () => {
             <h4 className="font-display font-semibold text-foreground mb-3">{t("footer_company")}</h4>
             <ul className="space-y-2 text-sm">
               {company.map((item) => (
-                <li key={item}><a href="#about" className="hover:text-foreground transition-colors">{item}</a></li>
+                <li key={item.href + item.label}>
+                  {item.href.startsWith("/") ? (
+                    <Link to={item.href} className="hover:text-foreground transition-colors">{item.label}</Link>
+                  ) : (
+                    <a href={item.href} className="hover:text-foreground transition-colors">{item.label}</a>
+                  )}
+                </li>
               ))}
             </ul>
           </div>
