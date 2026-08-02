@@ -50,24 +50,38 @@ const AdminBanners = () => {
   });
 
   const uploadImage = async (file: File) => {
-    const ext = file.name.split(".").pop();
+    const rawExt = (file.name.split(".").pop() || "jpg").toLowerCase();
+    const ext = /^[a-z0-9]{2,5}$/.test(rawExt) ? rawExt : "jpg";
     const path = `banners/${crypto.randomUUID()}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file);
-    if (error) throw error;
+    const { error } = await supabase.storage
+      .from("product-images")
+      .upload(path, file, { contentType: file.type || "image/jpeg" });
+    if (error) throw new Error(`Image upload failed: ${error.message}`);
     return supabase.storage.from("product-images").getPublicUrl(path).data.publicUrl;
   };
 
   const saveMutation = useMutation({
     mutationFn: async () => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session) {
+        throw new Error("Your session expired. Please sign in again and retry.");
+      }
       let image_url: string | undefined;
       if (imageFile) image_url = await uploadImage(imageFile);
-      const payload = { ...form, ...(image_url && { image_url }) };
+      const payload = {
+        title: form.title.trim() || null,
+        description: form.description.trim() || null,
+        link_url: form.link_url.trim() || null,
+        sort_order: Number.isFinite(form.sort_order) ? form.sort_order : 0,
+        is_active: form.is_active,
+        ...(image_url && { image_url }),
+      };
       if (editingId) {
         const { error } = await db.from("banners").update(payload).eq("id", editingId);
-        if (error) throw error;
+        if (error) throw new Error(`Saving banner failed: ${error.message}`);
       } else {
         const { error } = await db.from("banners").insert(payload);
-        if (error) throw error;
+        if (error) throw new Error(`Saving banner failed: ${error.message}`);
       }
     },
     onSuccess: () => {
