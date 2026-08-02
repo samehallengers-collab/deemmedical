@@ -1,9 +1,19 @@
 import deemLogo from "@/assets/deem-logo.png";
-import { useLanguage } from "@/i18n/LanguageContext";
+import { useLanguage, Tr } from "@/i18n/LanguageContext";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const { t } = useLanguage();
-  const products = [t("fp_diagnostic"), t("fp_monitoring"), t("fp_surgical"), t("fp_lab")];
+  const { data: ranges } = useQuery({
+    queryKey: ["footer-product-ranges"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("product_ranges").select("*").order("sort_order");
+      if (error) throw error;
+      return data;
+    },
+  });
   const services = [t("fs_install"), t("fs_training"), t("fs_maintenance"), t("fs_support")];
   const company = [t("fc_about"), t("fc_cert"), t("fc_careers"), t("fc_contact")];
   return (
@@ -24,8 +34,12 @@ const Footer = () => {
           <div>
             <h4 className="font-display font-semibold text-foreground mb-3">{t("footer_products")}</h4>
             <ul className="space-y-2 text-sm">
-              {products.map((item) => (
-                <li key={item}><a href="#products" className="hover:text-foreground transition-colors">{item}</a></li>
+              {ranges?.map((range) => (
+                <li key={range.id}>
+                  <Link to={`/products?range=${range.id}`} className="hover:text-foreground transition-colors">
+                    <Tr>{range.name}</Tr>
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
