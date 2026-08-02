@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import { LanguageProvider } from "@/i18n/LanguageContext";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import Index from "./pages/Index.tsx";
 import About from "./pages/About.tsx";
 import Products from "./pages/Products.tsx";
@@ -23,6 +24,7 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <LanguageProvider>
+            <ScrollToTop />
             <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/index" element={<Index />} />
