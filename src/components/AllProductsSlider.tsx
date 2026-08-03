@@ -15,7 +15,7 @@ import { useLanguage, Tr } from "@/i18n/LanguageContext";
 
 const AllProductsSlider = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, dir } = useLanguage();
 
   const { data: products, isLoading } = useQuery({
     queryKey: ["public-all-products-slider"],
@@ -49,7 +49,7 @@ const AllProductsSlider = () => {
 
         <div className="px-10">
           <Carousel
-            opts={{ align: "start", loop: true }}
+            opts={{ align: "start", loop: true, direction: dir }}
             plugins={[
               Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true }),
             ]}

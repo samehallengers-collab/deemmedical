@@ -18,7 +18,7 @@ import {
 import { useLanguage, Tr } from "@/i18n/LanguageContext";
 
 const Products = () => {
-  const { t } = useLanguage();
+  const { t, dir } = useLanguage();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const rangeId = searchParams.get("range");
@@ -102,7 +102,7 @@ const Products = () => {
             ) : products && products.length > 0 ? (
               <div className="px-10">
                 <Carousel
-                  opts={{ align: "start", loop: true }}
+                  opts={{ align: "start", loop: true, direction: dir }}
                   plugins={[Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })]}
                   className="w-full"
                 >
