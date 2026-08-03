@@ -11,6 +11,7 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "@/components/ui/carousel";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const ProductsSection = () => {
   const { data: ranges, isLoading: rangesLoading } = useQuery({
@@ -105,10 +106,12 @@ const ProductsSection = () => {
   );
 };
 
-const ProductSlider = ({ products }: { products: any[] }) => (
+const ProductSlider = ({ products }: { products: any[] }) => {
+  const { dir } = useLanguage();
+  return (
   <div className="px-10">
     <Carousel
-      opts={{ align: "start", loop: true }}
+      opts={{ align: "start", loop: true, direction: dir }}
       plugins={[Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })]}
       className="w-full"
     >
