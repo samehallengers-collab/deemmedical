@@ -9,7 +9,7 @@ import {
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const PartnersSection = () => {
-  const { t } = useLanguage();
+  const { t, dir } = useLanguage();
   const { data: partners, isLoading } = useQuery({
     queryKey: ["public-partners-slider"],
     queryFn: async () => {
@@ -37,7 +37,7 @@ const PartnersSection = () => {
         </div>
 
         <Carousel
-          opts={{ align: "start", loop: true, dragFree: true }}
+          opts={{ align: "start", loop: true, dragFree: true, direction: dir }}
           plugins={[
             Autoplay({ delay: 2000, stopOnInteraction: false, stopOnMouseEnter: true }),
           ]}
