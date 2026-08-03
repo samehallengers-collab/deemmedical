@@ -126,7 +126,8 @@ const ProductSlider = ({ products }: { products: any[] }) => {
       <CarouselNext />
     </Carousel>
   </div>
-);
+  );
+};
 
 const ProductCard = ({ product, index }: { product: any; index: number }) => {
   const navigate = useNavigate();
