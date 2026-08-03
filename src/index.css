@@ -16,9 +16,7 @@
   font-family: 'Cairo', 'DM Sans', system-ui, sans-serif;
 }
 
-html[dir="rtl"] .lucide-arrow-right,
 html[dir="rtl"] .lucide-chevron-right,
-html[dir="rtl"] .lucide-arrow-left,
 html[dir="rtl"] .lucide-chevron-left {
   transform: scaleX(-1);
 }
