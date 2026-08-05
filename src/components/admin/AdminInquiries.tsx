@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Check, Trash2, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import ConfirmDelete from "./ConfirmDelete";
 
 const AdminInquiries = () => {
   const { toast } = useToast();
