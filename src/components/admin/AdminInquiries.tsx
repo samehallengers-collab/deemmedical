@@ -101,9 +101,16 @@ const AdminInquiries = () => {
           </CardTitle>
           <div className="flex items-center gap-2">
             {selected.length > 0 && (
-              <Button variant="destructive" size="sm" onClick={() => deleteMany.mutate(selected)}>
-                <Trash2 className="w-4 h-4 mr-1.5" /> Delete ({selected.length})
-              </Button>
+              <ConfirmDelete
+                title={`Delete ${selected.length} selected inquir${selected.length === 1 ? "y" : "ies"}?`}
+                description="The selected inquiries will be permanently removed."
+                confirmLabel="Delete selected"
+                onConfirm={() => deleteMany.mutate(selected)}
+              >
+                <Button variant="destructive" size="sm">
+                  <Trash2 className="w-4 h-4 mr-1.5" /> Delete ({selected.length})
+                </Button>
+              </ConfirmDelete>
             )}
             <Button variant="outline" size="sm" onClick={exportCsv}>
               <Download className="w-4 h-4 mr-1.5" />
@@ -177,9 +184,15 @@ const AdminInquiries = () => {
                             <Check className="w-4 h-4" />
                           </Button>
                         )}
-                        <Button variant="ghost" size="sm" onClick={() => deleteInquiry.mutate(inq.id)}>
-                          <Trash2 className="w-4 h-4 text-destructive" />
-                        </Button>
+                        <ConfirmDelete
+                          title={`Delete inquiry from ${inq.name}?`}
+                          description="This inquiry will be permanently removed."
+                          onConfirm={() => deleteInquiry.mutate(inq.id)}
+                        >
+                          <Button variant="ghost" size="sm">
+                            <Trash2 className="w-4 h-4 text-destructive" />
+                          </Button>
+                        </ConfirmDelete>
                       </div>
                     </TableCell>
                   </TableRow>
