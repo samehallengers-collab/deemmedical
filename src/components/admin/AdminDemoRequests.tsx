@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Check, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import ConfirmDelete from "./ConfirmDelete";
 
 const AdminDemoRequests = () => {
   const { toast } = useToast();
@@ -92,9 +93,15 @@ const AdminDemoRequests = () => {
                             <Check className="w-4 h-4" />
                           </Button>
                         )}
-                        <Button variant="ghost" size="sm" onClick={() => deleteDemo.mutate(d.id)}>
-                          <Trash2 className="w-4 h-4 text-destructive" />
-                        </Button>
+                        <ConfirmDelete
+                          title={`Delete demo request from ${d.name}?`}
+                          description="This request will be permanently removed."
+                          onConfirm={() => deleteDemo.mutate(d.id)}
+                        >
+                          <Button variant="ghost" size="sm">
+                            <Trash2 className="w-4 h-4 text-destructive" />
+                          </Button>
+                        </ConfirmDelete>
                       </div>
                     </TableCell>
                   </TableRow>
