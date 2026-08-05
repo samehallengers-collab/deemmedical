@@ -216,7 +216,7 @@ const AdminProducts = () => {
                       <div className="flex gap-1">
                         <Button variant="ghost" size="sm" onClick={() => openEdit(p)}><Pencil className="w-4 h-4" /></Button>
                         <ConfirmDelete
-                          title={`Delete "${p.name}"?`}
+                          title={`Delete "${p.title}"?`}
                           description="This product will be permanently removed from the website."
                           onConfirm={() => deleteMutation.mutate(p.id)}
                         >
