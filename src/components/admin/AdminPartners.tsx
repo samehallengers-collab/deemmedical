@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Pencil, Upload } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import ImageCropInput from "./ImageCropInput";
+import ConfirmDelete from "./ConfirmDelete";
 
 const AdminPartners = () => {
   const { toast } = useToast();
@@ -129,7 +130,13 @@ const AdminPartners = () => {
                   <TableCell>
                     <div className="flex gap-1">
                       <Button variant="ghost" size="sm" onClick={() => openEdit(p)}><Pencil className="w-4 h-4" /></Button>
-                      <Button variant="ghost" size="sm" onClick={() => deleteMutation.mutate(p.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                      <ConfirmDelete
+                        title={`Delete "${p.name}"?`}
+                        description="This partner will be permanently removed from the website."
+                        onConfirm={() => deleteMutation.mutate(p.id)}
+                      >
+                        <Button variant="ghost" size="sm"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                      </ConfirmDelete>
                     </div>
                   </TableCell>
                 </TableRow>
