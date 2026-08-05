@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Pencil, Upload } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import ImageCropInput from "./ImageCropInput";
+import ConfirmDelete from "./ConfirmDelete";
 
 interface Banner {
   id: string;
@@ -163,7 +164,13 @@ const AdminBanners = () => {
                   <TableCell>
                     <div className="flex gap-1">
                       <Button variant="ghost" size="sm" onClick={() => openEdit(b)}><Pencil className="w-4 h-4" /></Button>
-                      <Button variant="ghost" size="sm" onClick={() => deleteMutation.mutate(b.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                      <ConfirmDelete
+                        title="Delete this banner?"
+                        description="The banner will be permanently removed from the homepage slider."
+                        onConfirm={() => deleteMutation.mutate(b.id)}
+                      >
+                        <Button variant="ghost" size="sm"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                      </ConfirmDelete>
                     </div>
                   </TableCell>
                 </TableRow>
