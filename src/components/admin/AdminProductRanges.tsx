@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Pencil, Save, ImageIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import ImageCropInput from "./ImageCropInput";
+import ConfirmDelete from "./ConfirmDelete";
 
 const AdminProductRanges = () => {
   const { toast } = useToast();
@@ -126,7 +127,13 @@ const AdminProductRanges = () => {
                   <TableCell>
                     <div className="flex gap-1">
                       <Button variant="ghost" size="sm" onClick={() => openEdit(r)}><Pencil className="w-4 h-4" /></Button>
-                      <Button variant="ghost" size="sm" onClick={() => deleteMutation.mutate(r.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                      <ConfirmDelete
+                        title={`Delete "${r.name}"?`}
+                        description="This product range will be permanently removed."
+                        onConfirm={() => deleteMutation.mutate(r.id)}
+                      >
+                        <Button variant="ghost" size="sm"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                      </ConfirmDelete>
                     </div>
                   </TableCell>
                 </TableRow>
