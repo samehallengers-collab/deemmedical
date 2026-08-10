@@ -191,8 +191,8 @@ const AdminProducts = () => {
   };
 
   const getPartnerName = (product: NonNullable<typeof products>[0]) => {
-    const pid = (product as any).partner_id as string | null;
-    const pother = (product as any).partner_other as string | null;
+    const pid = product.partner_id;
+    const pother = product.partner_other;
     if (pid) return partners?.find((p) => p.id === pid)?.name || "—";
     return pother || "—";
   };
