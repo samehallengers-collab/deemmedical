@@ -306,6 +306,29 @@ const AdminProducts = () => {
               </div>
             </div>
             <div className="space-y-1.5">
+              <Label>Partner</Label>
+              <Select value={partnerValue} onValueChange={setPartnerValue}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a partner" />
+                </SelectTrigger>
+                <SelectContent className="max-h-72">
+                  <SelectItem value="none">No partner</SelectItem>
+                  {partners?.map((p) => (
+                    <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                  ))}
+                  <SelectItem value="other">Other…</SelectItem>
+                </SelectContent>
+              </Select>
+              {partnerValue === "other" && (
+                <Input
+                  className="mt-2"
+                  placeholder="Partner name"
+                  value={partnerOther}
+                  onChange={(e) => setPartnerOther(e.target.value)}
+                />
+              )}
+            </div>
+            <div className="space-y-1.5">
               <Label>Specifications</Label>
               <Textarea value={form.specifications} onChange={(e) => setForm({ ...form, specifications: e.target.value })} placeholder="Enter product specifications..." />
             </div>
