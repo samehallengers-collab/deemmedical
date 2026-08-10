@@ -161,17 +161,17 @@ const AdminProducts = () => {
       description: product.description || "",
       category: product.category || "",
       sort_order: product.sort_order || 0,
-      video_url: (product as any).video_url || "",
-      specifications: (product as any).specifications || "",
+      video_url: product.video_url || "",
+      specifications: product.specifications || "",
     });
     // Load range assignments for this product
     const productAssignments = assignments?.filter((a) => a.product_id === product.id) || [];
     setSelectedRangeIds(productAssignments.map((a) => a.product_range_id));
-    const pid = (product as any).partner_id as string | null;
-    const pother = (product as any).partner_other as string | null;
+    const pid = product.partner_id;
+    const pother = product.partner_other;
     setPartnerValue(pid ? pid : pother ? "other" : "none");
     setPartnerOther(pother || "");
-    setCurrentImageUrl((product as any).image_url || null);
+    setCurrentImageUrl(product.image_url || null);
     setDialogOpen(true);
   };
 
@@ -191,8 +191,8 @@ const AdminProducts = () => {
   };
 
   const getPartnerName = (product: NonNullable<typeof products>[0]) => {
-    const pid = (product as any).partner_id as string | null;
-    const pother = (product as any).partner_other as string | null;
+    const pid = product.partner_id;
+    const pother = product.partner_other;
     if (pid) return partners?.find((p) => p.id === pid)?.name || "—";
     return pother || "—";
   };
@@ -236,7 +236,7 @@ const AdminProducts = () => {
                     <TableCell className="font-medium">{p.title}</TableCell>
                     <TableCell>{p.category}</TableCell>
                     <TableCell className="max-w-[200px] truncate">{getRangeNames(p.id)}</TableCell>
-                    <TableCell className="max-w-[160px] truncate">{getPartnerName(p)}</TableCell>
+                    <TableCell className="max-w-[200px] truncate" title={getPartnerName(p)}>{getPartnerName(p)}</TableCell>
                     <TableCell>
                       <Switch checked={p.is_active ?? true} onCheckedChange={(v) => toggleActive.mutate({ id: p.id, is_active: v })} />
                     </TableCell>
