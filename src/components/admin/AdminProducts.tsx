@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Pencil, Upload, Save } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -22,6 +23,8 @@ const AdminProducts = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ title: "", description: "", category: "", sort_order: 0, video_url: "", specifications: "" });
   const [selectedRangeIds, setSelectedRangeIds] = useState<string[]>([]);
+  const [partnerValue, setPartnerValue] = useState<string>("none");
+  const [partnerOther, setPartnerOther] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
 
@@ -52,6 +55,15 @@ const AdminProducts = () => {
     },
   });
 
+  const { data: partners } = useQuery({
+    queryKey: ["admin-partners-for-products"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("partners").select("id, name").order("sort_order");
+      if (error) throw error;
+      return data;
+    },
+  });
+
   const uploadImage = async (file: File) => {
     const ext = file.name.split(".").pop();
     const path = `${crypto.randomUUID()}.${ext}`;
@@ -74,6 +86,8 @@ const AdminProducts = () => {
         product_range_id: selectedRangeIds.length > 0 ? selectedRangeIds[0] : null,
         video_url: form.video_url || null,
         specifications: form.specifications || null,
+        partner_id: partnerValue !== "none" && partnerValue !== "other" ? partnerValue : null,
+        partner_other: partnerValue === "other" ? partnerOther.trim() || null : null,
         ...(image_url && { image_url }),
       };
 
@@ -134,6 +148,8 @@ const AdminProducts = () => {
     setEditingId(null);
     setForm({ title: "", description: "", category: "", sort_order: 0, video_url: "", specifications: "" });
     setSelectedRangeIds([]);
+    setPartnerValue("none");
+    setPartnerOther("");
     setImageFile(null);
     setCurrentImageUrl(null);
   };
@@ -151,6 +167,10 @@ const AdminProducts = () => {
     // Load range assignments for this product
     const productAssignments = assignments?.filter((a) => a.product_id === product.id) || [];
     setSelectedRangeIds(productAssignments.map((a) => a.product_range_id));
+    const pid = (product as any).partner_id as string | null;
+    const pother = (product as any).partner_other as string | null;
+    setPartnerValue(pid ? pid : pother ? "other" : "none");
+    setPartnerOther(pother || "");
     setCurrentImageUrl((product as any).image_url || null);
     setDialogOpen(true);
   };
@@ -168,6 +188,13 @@ const AdminProducts = () => {
     setSelectedRangeIds((prev) =>
       prev.includes(rangeId) ? prev.filter((id) => id !== rangeId) : [...prev, rangeId]
     );
+  };
+
+  const getPartnerName = (product: NonNullable<typeof products>[0]) => {
+    const pid = (product as any).partner_id as string | null;
+    const pother = (product as any).partner_other as string | null;
+    if (pid) return partners?.find((p) => p.id === pid)?.name || "—";
+    return pother || "—";
   };
 
   return (
@@ -190,6 +217,7 @@ const AdminProducts = () => {
                   <TableHead>Title</TableHead>
                   <TableHead>Category</TableHead>
                   <TableHead>Product Ranges</TableHead>
+                  <TableHead>Partner</TableHead>
                   <TableHead>Active</TableHead>
                   <TableHead>Order</TableHead>
                   <TableHead>Actions</TableHead>
@@ -208,6 +236,7 @@ const AdminProducts = () => {
                     <TableCell className="font-medium">{p.title}</TableCell>
                     <TableCell>{p.category}</TableCell>
                     <TableCell className="max-w-[200px] truncate">{getRangeNames(p.id)}</TableCell>
+                    <TableCell className="max-w-[160px] truncate">{getPartnerName(p)}</TableCell>
                     <TableCell>
                       <Switch checked={p.is_active ?? true} onCheckedChange={(v) => toggleActive.mutate({ id: p.id, is_active: v })} />
                     </TableCell>
@@ -227,7 +256,7 @@ const AdminProducts = () => {
                   </TableRow>
                 ))}
                 {!products?.length && (
-                  <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No products yet</TableCell></TableRow>
+                  <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-8">No products yet</TableCell></TableRow>
                 )}
               </TableBody>
             </Table>
