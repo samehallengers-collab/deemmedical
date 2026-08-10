@@ -161,17 +161,17 @@ const AdminProducts = () => {
       description: product.description || "",
       category: product.category || "",
       sort_order: product.sort_order || 0,
-      video_url: (product as any).video_url || "",
-      specifications: (product as any).specifications || "",
+      video_url: product.video_url || "",
+      specifications: product.specifications || "",
     });
     // Load range assignments for this product
     const productAssignments = assignments?.filter((a) => a.product_id === product.id) || [];
     setSelectedRangeIds(productAssignments.map((a) => a.product_range_id));
-    const pid = (product as any).partner_id as string | null;
-    const pother = (product as any).partner_other as string | null;
+    const pid = product.partner_id;
+    const pother = product.partner_other;
     setPartnerValue(pid ? pid : pother ? "other" : "none");
     setPartnerOther(pother || "");
-    setCurrentImageUrl((product as any).image_url || null);
+    setCurrentImageUrl(product.image_url || null);
     setDialogOpen(true);
   };
 
