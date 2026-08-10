@@ -262,6 +262,8 @@ export type Database = {
           id: string
           image_url: string | null
           is_active: boolean | null
+          partner_id: string | null
+          partner_other: string | null
           product_range_id: string | null
           sort_order: number | null
           specifications: string | null
@@ -276,6 +278,8 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          partner_id?: string | null
+          partner_other?: string | null
           product_range_id?: string | null
           sort_order?: number | null
           specifications?: string | null
@@ -290,6 +294,8 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          partner_id?: string | null
+          partner_other?: string | null
           product_range_id?: string | null
           sort_order?: number | null
           specifications?: string | null
@@ -298,6 +304,13 @@ export type Database = {
           video_url?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "products_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "products_product_range_id_fkey"
             columns: ["product_range_id"]
