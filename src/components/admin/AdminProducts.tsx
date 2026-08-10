@@ -236,7 +236,7 @@ const AdminProducts = () => {
                     <TableCell className="font-medium">{p.title}</TableCell>
                     <TableCell>{p.category}</TableCell>
                     <TableCell className="max-w-[200px] truncate">{getRangeNames(p.id)}</TableCell>
-                    <TableCell className="max-w-[160px] truncate">{getPartnerName(p)}</TableCell>
+                    <TableCell className="max-w-[200px] truncate" title={getPartnerName(p)}>{getPartnerName(p)}</TableCell>
                     <TableCell>
                       <Switch checked={p.is_active ?? true} onCheckedChange={(v) => toggleActive.mutate({ id: p.id, is_active: v })} />
                     </TableCell>
