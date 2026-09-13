@@ -338,6 +338,60 @@ export type Database = {
         }
         Relationships: []
       }
+      vlogs: {
+        Row: {
+          body: string | null
+          body_ar: string | null
+          cover_image_url: string | null
+          created_at: string
+          excerpt: string | null
+          excerpt_ar: string | null
+          gallery_urls: string[]
+          id: string
+          is_published: boolean
+          published_at: string
+          sort_order: number
+          title: string
+          title_ar: string | null
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          body?: string | null
+          body_ar?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          excerpt_ar?: string | null
+          gallery_urls?: string[]
+          id?: string
+          is_published?: boolean
+          published_at?: string
+          sort_order?: number
+          title: string
+          title_ar?: string | null
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          body?: string | null
+          body_ar?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          excerpt_ar?: string | null
+          gallery_urls?: string[]
+          id?: string
+          is_published?: boolean
+          published_at?: string
+          sort_order?: number
+          title?: string
+          title_ar?: string | null
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
