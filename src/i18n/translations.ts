@@ -11,6 +11,7 @@ export const translations = {
     nav_about: "About",
     nav_partners: "Partners",
     nav_services: "Services",
+    nav_vlogs: "Vlogs",
     nav_contact: "Contact",
     get_quote: "Get a Quote",
     // Hero
@@ -67,6 +68,11 @@ export const translations = {
     products_kicker: "Our Products",
     products_title: "Equipment You Can Rely On",
     products_subtitle: "Browse our full range of medical equipment for hospitals, clinics, and laboratories.",
+    // Vlogs
+    vlogs_kicker: "Our Vlog",
+    vlogs_title: "Videos & Insights",
+    vlogs_subtitle: "Watch our latest videos on medical equipment, technology, and healthcare insights.",
+    no_vlogs: "No videos available yet. Check back soon!",
     // Services
     services_kicker: "Our Services",
     services_title: "End-to-End Equipment Solutions",
@@ -162,6 +168,7 @@ export const translations = {
     nav_about: "من نحن",
     nav_partners: "شركاؤنا",
     nav_services: "الخدمات",
+    nav_vlogs: "الفيديوهات",
     nav_contact: "تواصل معنا",
     get_quote: "اطلب عرض سعر",
     hero_badge: "معدات معتمدة من الهيئة السعودية للغذاء والدواء",
@@ -213,6 +220,10 @@ export const translations = {
     products_kicker: "منتجاتنا",
     products_title: "معدات يمكنك الاعتماد عليها",
     products_subtitle: "تصفح مجموعتنا الكاملة من المعدات الطبية للمستشفيات والعيادات والمختبرات.",
+    vlogs_kicker: "مدونة الفيديو",
+    vlogs_title: "فيديوهات ورؤى",
+    vlogs_subtitle: "شاهد أحدث فيديوهاتنا حول المعدات الطبية والتقنيات ورؤى الرعاية الصحية.",
+    no_vlogs: "لا توجد فيديوهات متاحة بعد. تفقد لاحقاً!",
     services_kicker: "خدماتنا",
     services_title: "حلول متكاملة للمعدات",
     services_subtitle: "بالإضافة إلى التوريد، نوفر دعماً شاملاً طوال دورة حياة المعدات.",
