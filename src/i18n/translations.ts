@@ -11,6 +11,7 @@ export const translations = {
     nav_about: "About",
     nav_partners: "Partners",
     nav_services: "Services",
+    nav_vlogs: "Vlogs",
     nav_contact: "Contact",
     get_quote: "Get a Quote",
     // Hero
@@ -162,6 +163,7 @@ export const translations = {
     nav_about: "من نحن",
     nav_partners: "شركاؤنا",
     nav_services: "الخدمات",
+    nav_vlogs: "الفيديوهات",
     nav_contact: "تواصل معنا",
     get_quote: "اطلب عرض سعر",
     hero_badge: "معدات معتمدة من الهيئة السعودية للغذاء والدواء",
