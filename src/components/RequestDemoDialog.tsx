@@ -150,7 +150,7 @@ const RequestDemoDialog = ({ open, onOpenChange }: RequestDemoDialogProps) => {
             >
               <SelectTrigger><SelectValue placeholder={rangeId ? t("ph_select_product") : t("ph_select_range_first")} /></SelectTrigger>
               <SelectContent className="max-h-72">
-                {filteredProducts?.map((p) => (<SelectItem key={p.id} value={p.title}>{p.title}</SelectItem>))}
+                {filteredProducts?.map((p) => (<SelectItem key={p.id} value={p.title}>{p.description || p.title}</SelectItem>))}
                 {rangeId && filteredProducts && filteredProducts.length === 0 && (
                   <div className="px-2 py-1.5 text-sm text-muted-foreground">{t("no_products")}</div>
                 )}
