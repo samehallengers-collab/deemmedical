@@ -153,10 +153,17 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+const fallbackCtx: Ctx = {
+  lang: "en",
+  setLang: () => {},
+  selectLang: () => {},
+  hasSelected: true,
+  t: (k: TKey) => translations.en[k] ?? k,
+  dir: "ltr",
+};
+
 export function useLanguage() {
-  const ctx = useContext(LanguageContext);
-  if (!ctx) throw new Error("useLanguage must be used inside LanguageProvider");
-  return ctx;
+  return useContext(LanguageContext) ?? fallbackCtx;
 }
 
 // Convenience component for auto-translated DB strings
