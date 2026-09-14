@@ -132,5 +132,12 @@ DROP TRIGGER IF EXISTS update_vlogs_updated_at ON public.vlogs;
 CREATE TRIGGER update_vlogs_updated_at BEFORE UPDATE ON public.vlogs
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
+-- Products: newer columns (partner, video, specifications) --------------------
+ALTER TABLE public.products
+  ADD COLUMN IF NOT EXISTS partner_id uuid REFERENCES public.partners(id),
+  ADD COLUMN IF NOT EXISTS partner_other text,
+  ADD COLUMN IF NOT EXISTS video_url text,
+  ADD COLUMN IF NOT EXISTS specifications text;
+
 -- Refresh the API schema cache
 NOTIFY pgrst, 'reload schema';
