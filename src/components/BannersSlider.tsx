@@ -40,7 +40,7 @@ const BannersSlider = () => {
   return (
     <section className="py-12 lg:py-16 bg-background">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="relative overflow-hidden rounded-2xl shadow-xl bg-muted aspect-[16/7] md:aspect-[21/8]">
+        <div className="relative overflow-hidden rounded-2xl shadow-xl bg-muted aspect-[21/9]">
           {banners.map((b, i) => (
             <div
               key={b.id}
@@ -52,7 +52,7 @@ const BannersSlider = () => {
                 <img
                   src={b.image_url}
                   alt={b.title || "Banner"}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               )}
               {(b.title || b.description) && (
